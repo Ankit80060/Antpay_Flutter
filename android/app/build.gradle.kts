@@ -1,8 +1,16 @@
+import java.util.Properties
+import java.io.FileInputStream
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
+}
+
+val keystorePropertiesFile = rootProject.file("key.properties")
+val keystoreProperties = Properties().apply {
+    load(FileInputStream(keystorePropertiesFile))
 }
 
 android {
@@ -28,28 +36,34 @@ android {
     versionName = flutter.versionName
 }
 
-
-   buildTypes {
-    getByName("release") {
-        // Enable code shrinking, obfuscation, and optimization
-        isMinifyEnabled = true
-        isShrinkResources = true
-
-        // Use your release signing config (for now debug if you don’t have keystore)
-        signingConfig = signingConfigs.getByName("debug")
-
-        // Add ProGuard rules
-        proguardFiles(
-            getDefaultProguardFile("proguard-android-optimize.txt"),
-            "proguard-rules.pro"
-        )
+// --- Signing configs ---
+    val releaseConfig = signingConfigs.create("release") {
+        keyAlias = keystoreProperties.getProperty("keyAlias")
+        keyPassword = keystoreProperties.getProperty("keyPassword")
+        storeFile = file(keystoreProperties.getProperty("storeFile"))
+        storePassword = keystoreProperties.getProperty("storePassword")
     }
 
-    getByName("debug") {
-        // Debug builds should not be minified
-        isMinifyEnabled = false
+    // --- Build types ---
+    buildTypes {
+        getByName("release") {
+            signingConfig = releaseConfig
+            isMinifyEnabled = true
+            isShrinkResources = true
+
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+        }
+
+        getByName("debug") {
+            isMinifyEnabled = false
+            isShrinkResources = false
+            signingConfig = signingConfigs.getByName("debug")
+        }
     }
-}
+
 
 }
 
