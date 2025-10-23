@@ -84,7 +84,7 @@ class InvestmentInvoiceDetailScreen extends StatelessWidget {
                       CustomElevatedButton(
                         width: 200,
                         onPressed: () {
-                          // controller.getGenerateOrder();
+                          controller.getGenerateOrder();
                         },
                         text: "Pay Now",
                       )

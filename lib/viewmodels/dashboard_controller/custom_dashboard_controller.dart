@@ -65,88 +65,93 @@ class CustomDashboardController extends GetxController
 
 
 
-callAddMoneyApi() async {
-  try {
-    isLoading.value = true;
+// callAddMoneyApi() async {
+//   try {
+//     isLoading.value = true;
 
-    CommonApiRepo repoClass = CommonApiRepo();
-    Map orderdata = SessionManager().getGenerateOrderResponse();
+//     CommonApiRepo repoClass = CommonApiRepo();
+//     Map orderdata = SessionManager().getGenerateOrderResponse();
 
-    String? customerId = await SessionManager().getCustomerId();
+//   String? customerId = await SessionManager().getCustomerId();
+// if (customerId == null || customerId.isEmpty) {
+//   CustomToast.show("Customer ID is missing. Please log in again.");
+//   isLoading.value = false;
+//   return;
+// }
 
 
-    final data = CustomerLoadbalanceRequest(
-      accountNumber: "0835",
-      customerId: customerId,
-      clientTxnId: "",
-      originalClientTxnId: "",
-      implType: "PG_TU_I",
-      refundFileId: "sreekumar.csv",
-      implId: "I|70190",
-      messageCode: "",
-      transactionAmount: ((double.tryParse(
-                  orderdata[SessionManager.INVESTMENT_AMOUNT]?.toString() ??
-                      '0') ??
-              0) *
-          100)
-          .toInt(),
-      sourceType: 0,
-      sender: "PayU PG",
-      sourceAccount: "27389282",
-      requestDateTime: "",
-      loadCurrency: "INR",
-      fundFlowType: "I",
-      fee: 0,
-      antTxnId: SessionManager().getAntTxnId(),
-      mobile: SessionManager().getMobile(),
-      remark: "remark",
-      paymentMethod: "PG",
-      payuResponse: SessionManager().getPayUResponse(),
-      transactionResult: SessionManager().getTranscationResult(),
-      transactionType: "Load",
-      pgNo: SessionManager().getAntTxnId(),
-      aParam:
-          AppConstant.generateAuthParam(SessionManager().getMobile().toString()),
-      tagName: "ppi-wallet_payment",
-    );
+//     final data = CustomerLoadbalanceRequest(
+//       accountNumber: SessionManager().getReterieveaccountNumber().toString(),
+//       customerId: customerId,
+//       clientTxnId: "",
+//       originalClientTxnId: "",
+//       implType: "PG_TU_I",
+//       refundFileId: "sreekumar.csv",
+//       implId: "I|70190",
+//       messageCode: "",
+//       transactionAmount: ((double.tryParse(
+//                   orderdata[SessionManager.INVESTMENT_AMOUNT]?.toString() ??
+//                       '0') ??
+//               0) *
+//           100)
+//           .toInt(),
+//       sourceType: 0,
+//       sender: "PayU PG",
+//       sourceAccount: "27389282",
+//       requestDateTime: "",
+//       loadCurrency: "INR",
+//       fundFlowType: "I",
+//       fee: 0,
+//       antTxnId: SessionManager().getAntTxnId(),
+//       mobile: SessionManager().getMobile(),
+//       remark: "remark",
+//       paymentMethod: "PG",
+//       payuResponse: SessionManager().getPayUResponse(),
+//       transactionResult: SessionManager().getTranscationResult(),
+//       transactionType: "Load",
+//       pgNo: SessionManager().getAntTxnId(),
+//       aParam:
+//           AppConstant.generateAuthParam(SessionManager().getMobile().toString()),
+//       tagName: "ppi-wallet_payment",
+//     );
 
-    var response = await repoClass.apiClient.customerloadaccount(
-      AuthToken.getAuthToken(),
-      SessionManager().getToken().toString(),
-      data,
-    );
-    final Map<String, dynamic> decodedResponse =
-        response is String ? jsonDecode(response) : response;
+//     var response = await repoClass.apiClient.customerloadaccount(
+//       AuthToken.getAuthToken(),
+//       SessionManager().getToken().toString(),
+//       data,
+//     );
+//     final Map<String, dynamic> decodedResponse =
+//         response is String ? jsonDecode(response) : response;
 
-    print("Decoded Response: $decodedResponse");
+//     print("Decoded Response: $decodedResponse");
 
-    if (decodedResponse['status'] == 1 ||
-        decodedResponse['responseCode'] == '00') {
-      customerLoadbalanceResponse = decodedResponse as CustomerLoadbalanceResponse?;
-      CustomToast.show(decodedResponse['msg'] ?? "Load Money Successful");
-    } else {
-      CustomToast.show(decodedResponse['msg']);
-    }
-  } catch (e) {
-    print("Error: $e");
+//     if (decodedResponse['status'] == 1 ||
+//         decodedResponse['responseCode'] == '00') {
+//       customerLoadbalanceResponse = decodedResponse as CustomerLoadbalanceResponse?;
+//       CustomToast.show(decodedResponse['msg'] ?? "Load Money Successful");
+//     } else {
+//       CustomToast.show(decodedResponse['msg']);
+//     }
+//   } catch (e) {
+//     print("Error: $e");
 
-  } finally {
-    isLoading.value = false;
-  }
-}
+//   } finally {
+//     isLoading.value = false;
+//   }
+// }
 
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) async {
-    if (state == AppLifecycleState.resumed) {
-      if (SessionManager().getTranscationResult() == AppConstant.RESULT_OK) {
-        // await callAddMoneyApi();
-      }
-    }
+//   @override
+//   void didChangeAppLifecycleState(AppLifecycleState state) async {
+//     if (state == AppLifecycleState.resumed) {
+//       if (SessionManager().getTranscationResult() == AppConstant.RESULT_OK) {
+//         await callAddMoneyApi();
+//       }
+//     }
 
-    if (state == AppLifecycleState.inactive) print("inactive");
-    if (state == AppLifecycleState.detached) print("detached");
-    if (state == AppLifecycleState.paused) print("paused");
-  }
+//     if (state == AppLifecycleState.inactive) print("inactive");
+//     if (state == AppLifecycleState.detached) print("detached");
+//     if (state == AppLifecycleState.paused) print("paused");
+//   }
 
   @override
   void onClose() {

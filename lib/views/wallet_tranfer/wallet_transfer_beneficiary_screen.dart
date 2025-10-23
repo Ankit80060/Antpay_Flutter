@@ -1,5 +1,6 @@
 import 'package:antpay_lite/custom_widget/custom_appbar.dart';
 import 'package:antpay_lite/custom_widget/custom_button.dart';
+import 'package:antpay_lite/custom_widget/custom_loader.dart';
 import 'package:antpay_lite/custom_widget/custom_textfield.dart';
 import 'package:antpay_lite/custom_widget/custom_toast_msg.dart';
 import 'package:antpay_lite/custom_widget/customstyles.dart';
@@ -131,6 +132,12 @@ class WalletTransferBeneficailScreen extends StatelessWidget {
                 Text("Registerd Beneficiaries", style: CustomStyles.black13500),
                 const SizedBox(height: 10),
                 Obx(() {
+                        if (WalletTranferController.isScreenLoading.value) {
+                    return const Center(
+                      child: Customloader(),
+                    );
+                  }
+
                   if (WalletTranferController.beneficiaryList.isEmpty) {
                     return const Center(child: Text("No beneficiaries found"));
                   }

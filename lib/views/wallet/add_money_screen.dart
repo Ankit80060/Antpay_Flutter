@@ -19,7 +19,7 @@ class AddMoneyView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MainScaffold(
-       body: Stack(children: [
+      body: Stack(children: [
         SafeArea(
           child: SingleChildScrollView(
             physics: ClampingScrollPhysics(),
@@ -251,17 +251,26 @@ class AddMoneyView extends StatelessWidget {
                                 horizontal: 20, vertical: 10),
                           ),
                           onPressed: () {
-                           if( isRechargeScreen == true){
-                              if(addMoneyController.enteredAmount.value.text!=10){
+                            final enteredText = addMoneyController
+                                .enteredAmount.value.text
+                                .trim();
+                            final enteredAmount =
+                                double.tryParse(enteredText) ?? 0;
+                            if (enteredText.isEmpty) {
+                              CustomToast.show('Please enter amount');
+                              return;
+                            }
+
+                            if (isRechargeScreen == true) {
+                              if (enteredAmount < 10) {
                                 CustomToast.show(
-                      'Amount Should not be less than ₹ 10');
-                         }else{
-                            addMoneyController.generatePayUOrder();
-                         }
-                           }else{
-                            addMoneyController.generatePayUOrder();
-                         }
-                          
+                                    'Amount Should not be less than ₹ 10');
+                              } else {
+                                addMoneyController.generatePayUOrder();
+                              }
+                            } else {
+                              addMoneyController.generatePayUOrder();
+                            }
                           },
                           child: Obx(() => Text(
                                 addMoneyController.serviceName.value !=

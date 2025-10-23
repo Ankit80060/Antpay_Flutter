@@ -187,11 +187,21 @@ class ConfirmMpinController extends GetxController {
     }
   }
 
+@override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    mpinController.clear();
+  }
   @override
   void onClose() {
     // TODO: implement onClose
     
     super.onClose();
+    if (Get.isRegistered<ConfirmMpinController>()) {
+  Get.delete<ConfirmMpinController>();
+}
     mpinController.dispose();
   }
+
 }

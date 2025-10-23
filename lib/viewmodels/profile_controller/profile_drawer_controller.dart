@@ -53,38 +53,38 @@ class ProfileDrawerController extends GetxController {
       print("No image selected");
     }
   }
+
   Future<void> pickImageFromCamera() async {
-  final XFile? image = await _picker.pickImage(source: ImageSource.camera);
-  if (image != null) {
-    pickedImagePath.value = image.path;
-    final bytes = await File(image.path).readAsBytes();
-    base64Image.value = base64Encode(bytes);
+    final XFile? image = await _picker.pickImage(source: ImageSource.camera);
+    if (image != null) {
+      pickedImagePath.value = image.path;
+      final bytes = await File(image.path).readAsBytes();
+      base64Image.value = base64Encode(bytes);
 
-    ProfilePicUploadRequest request = ProfilePicUploadRequest(
-      mobile: SessionManager().getMobile().toString(),
-      profilePic: base64Image.value,
-      aParam: AppConstant.generateAuthParam(
-        SessionManager().getMobile().toString(),
-      ),
-    );
+      ProfilePicUploadRequest request = ProfilePicUploadRequest(
+        mobile: SessionManager().getMobile().toString(),
+        profilePic: base64Image.value,
+        aParam: AppConstant.generateAuthParam(
+          SessionManager().getMobile().toString(),
+        ),
+      );
 
-    final response = await repo.apiClient.getUploadProfilePic(
-      AuthToken.getAuthToken(),
-      SessionManager().getToken().toString(),
-      request,
-    );
+      final response = await repo.apiClient.getUploadProfilePic(
+        AuthToken.getAuthToken(),
+        SessionManager().getToken().toString(),
+        request,
+      );
 
-    if (response.status == '1') {
-      imagePic.value = response.pic;
-      SessionManager().addProfilePic(imagePic.value);
+      if (response.status == '1') {
+        imagePic.value = response.pic;
+        SessionManager().addProfilePic(imagePic.value);
+      } else {
+        print('Error: ${response.msg}');
+      }
     } else {
-      print('Error: ${response.msg}');
+      print("No image captured");
     }
-  } else {
-    print("No image captured");
   }
-}
-
 
   Future<void> getProfilePic() async {
     isLoading.value = true;
@@ -125,54 +125,49 @@ class ProfileDrawerController extends GetxController {
   }
 
   void clickLogoutFromApp() {
-
-
-    
-
-      Get.dialog(
-        AlertDialog(
-          contentPadding:
-              EdgeInsets.only(left: 15.0, right: 15.0, bottom: 10.0),
-          titlePadding: EdgeInsets.all(15.0),
-          surfaceTintColor: Colors.transparent,
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(5),
-          ),
-          title: Text(
-           "Logout",
-            style: CustomStyles.black16600,
-          ),
-          content: Text(
-           "Are you sure you want to logout?",
-            style: CustomStyles.black14400.copyWith(fontSize: 13.0),
-          ),
-          actions: [
-            GestureDetector(
-              onTap: () {
-                Get.back(); 
-              },
-              child: Text("Cancel",
-                  style: CustomStyles.black14400.copyWith(color: Colors.red)),
-            ),
-            SizedBox(
-              width: 5.0,
-            ),
-            GestureDetector(
-              onTap: () {
-                 SessionManager().logOutUser();
-                  UtilityPreferences().setString('isOnboarded', 'true');
-
-                  Get.offAllNamed(  RoutesName.login);
-
-                  CustomToast.show('User Logged Out Successfully!');
-              },
-              child: Text("Confirm",
-                  style:
-                      CustomStyles.black14400.copyWith(color: AppColors.dblue)),
-            ),
-          ],
+    Get.dialog(
+      AlertDialog(
+        contentPadding: EdgeInsets.only(left: 15.0, right: 15.0, bottom: 10.0),
+        titlePadding: EdgeInsets.all(15.0),
+        surfaceTintColor: Colors.transparent,
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(5),
         ),
-      );
+        title: Text(
+          "Logout",
+          style: CustomStyles.black16600,
+        ),
+        content: Text(
+          "Are you sure you want to logout?",
+          style: CustomStyles.black14400.copyWith(fontSize: 13.0),
+        ),
+        actions: [
+          GestureDetector(
+            onTap: () {
+              Get.back();
+            },
+            child: Text("Cancel",
+                style: CustomStyles.black14400.copyWith(color: Colors.red)),
+          ),
+          SizedBox(
+            width: 5.0,
+          ),
+          GestureDetector(
+            onTap: () {
+              SessionManager().logOutUser();
+              UtilityPreferences().setString('isOnboarded', 'true');
+
+              Get.offAllNamed(RoutesName.login);
+
+              CustomToast.show('User Logged Out Successfully!');
+            },
+            child: Text("Confirm",
+                style:
+                    CustomStyles.black14400.copyWith(color: AppColors.dblue)),
+          ),
+        ],
+      ),
+    );
   }
 }

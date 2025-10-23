@@ -2,6 +2,7 @@ import 'package:antpay_lite/custom_widget/custom_appbar.dart';
 import 'package:antpay_lite/custom_widget/custom_button.dart';
 import 'package:antpay_lite/custom_widget/custom_textfield.dart';
 import 'package:antpay_lite/custom_widget/customstyles.dart';
+import 'package:antpay_lite/model/AccountTransfer/customer_fetch_beneficiary.dart';
 import 'package:antpay_lite/prefrences/session_manager.dart';
 import 'package:antpay_lite/viewmodels/account_transfer_controller/account_transfer_controller.dart';
 import 'package:antpay_lite/views/resetMpin/confirm_mpin_screen.dart';
@@ -12,7 +13,7 @@ import 'package:get/get.dart';
 import '../../MainScaffold.dart';
 
 class AccountTransferScreen extends StatelessWidget {
-    final dynamic beneficiaryData;
+  BeneficiaryData? beneficiaryData;
   AccountTransferScreen({super.key,this.beneficiaryData});
 
   final controller = Get.put(AccountTransferController());
@@ -81,7 +82,7 @@ class AccountTransferScreen extends StatelessWidget {
                           if(formKey.currentState!.validate()){
                           SessionManager().addValue(controller.amountController.text);
                           SessionManager().addMessage(controller.remarkController.text);
-                            Get.off(()=>ConfirmMPINScreen(),arguments: beneficiaryData);
+                            Get.offAll(()=>ConfirmMPINScreen(),arguments: beneficiaryData);
                           }
                          
                         },

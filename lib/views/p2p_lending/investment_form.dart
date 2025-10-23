@@ -206,89 +206,89 @@ class InvestmentKycForm extends StatelessWidget {
                         if (controller.stateList.isEmpty) {
                           return const Text("Loading states...");
                         }
-                        return SizedBox();
+                  
 
-                        // return CustomTypeAheadFormField<StateList>(
-                        //   controller: controller.stateSearchController,
-                        //   labelText: "State",
-                        //   hintText: "Search State",
-                        //   suggestionsCallback: (pattern) async {
-                        //     return controller.searchState(pattern);
-                        //   },
-                        //   itemBuilder: (context, StateList suggestion) {
-                        //     return ListTile(
-                        //         title: Text(suggestion.state ?? 'NA'));
-                        //   },
-                        //   onSuggestionSelected: (StateList suggestion) {
-                        //     controller.selectedState.value = suggestion;
-                        //     controller.stateSearchController.text =
-                        //         suggestion.state ?? '';
-                        //     controller.selectedCity.value = null;
-                        //     controller.citySearchController.clear();
-                        //     controller.initCityList(suggestion.code);
-                        //   },
-                        //   validator: (val) =>
-                        //       controller.selectedState.value == null
-                        //           ? "Please select a state"
-                        //           : null,
-                        // );
+                        return CustomTypeAheadFormField<StateList>(
+                          controller: controller.stateSearchController,
+                          labelText: "State",
+                          hintText: "Search State",
+                          suggestionsCallback: (pattern) async {
+                            return controller.searchState(pattern);
+                          },
+                          itemBuilder: (context, StateList suggestion) {
+                            return ListTile(
+                                title: Text(suggestion.state ?? 'NA'));
+                          },
+                          onSuggestionSelected: (StateList suggestion) {
+                            controller.selectedState.value = suggestion;
+                            controller.stateSearchController.text =
+                                suggestion.state ?? '';
+                            controller.selectedCity.value = null;
+                            controller.citySearchController.clear();
+                            controller.initCityList(suggestion.code);
+                          },
+                          validator: (val) =>
+                              controller.selectedState.value == null
+                                  ? "Please select a state"
+                                  : null,
+                        );
                       }),
                       Obx(() {
                         if (controller.cityList.isEmpty) {
                           return SizedBox();
                         }
-                         return SizedBox();
+                   
 
-                        // return CustomTypeAheadFormField<City>(
-                        //   controller: controller.citySearchController,
-                        //   labelText: "City",
-                        //   hintText: "Search City",
-                        //   suggestionsCallback: (pattern) async {
-                        //     return controller.searchCity(pattern);
-                        //   },
-                        //   itemBuilder: (context, City suggestion) {
-                        //     return ListTile(
-                        //       title: Text(suggestion.cityName ?? 'NA'),
-                        //     );
-                        //   },
-                        //   onSuggestionSelected: (City suggestion) {
-                        //     controller.selectedCity.value = suggestion;
-                        //     controller.citySearchController.text =
-                        //         suggestion.cityName ?? '';
-                        //   },
-                        //   validator: (val) =>
-                        //       controller.selectedCity.value == null
-                        //           ? "Please select a city"
-                        //           : null,
-                        // );
+                        return CustomTypeAheadFormField<City>(
+                          controller: controller.citySearchController,
+                          labelText: "City",
+                          hintText: "Search City",
+                          suggestionsCallback: (pattern) async {
+                            return controller.searchCity(pattern);
+                          },
+                          itemBuilder: (context, City suggestion) {
+                            return ListTile(
+                              title: Text(suggestion.cityName ?? 'NA'),
+                            );
+                          },
+                          onSuggestionSelected: (City suggestion) {
+                            controller.selectedCity.value = suggestion;
+                            controller.citySearchController.text =
+                                suggestion.cityName ?? '';
+                          },
+                          validator: (val) =>
+                              controller.selectedCity.value == null
+                                  ? "Please select a city"
+                                  : null,
+                        );
                       }),
                       Obx(() {
                         if (controller.occupationList.isEmpty) {
                           return SizedBox();
                         }
 
-                        // return CustomTypeAheadFormField<OccupationList>(
-                        //   controller: controller.occupationSearchController,
-                        //   labelText: "Occupation",
-                        //   hintText: "Search Occupation",
-                        //   suggestionsCallback: (pattern) async {
-                        //     return controller.searchOccupation(pattern);
-                        //   },
-                        //   itemBuilder: (context, OccupationList suggestion) {
-                        //     return ListTile(
-                        //       title: Text(suggestion.occupation ?? 'NA'),
-                        //     );
-                        //   },
-                        //   onSuggestionSelected: (OccupationList suggestion) {
-                        //     controller.selectedOccupation.value = suggestion;
-                        //     controller.occupationSearchController.text =
-                        //         suggestion.occupation ?? '';
-                        //   },
-                        //   validator: (val) =>
-                        //       controller.selectedOccupation.value == null
-                        //           ? "Please select a occupation"
-                        //           : null,
-                        // );
+                        return CustomTypeAheadFormField<OccupationList>(
+                          controller: controller.occupationSearchController,
+                          labelText: "Occupation",
+                          hintText: "Search Occupation",
+                          suggestionsCallback: (pattern) async {
+                            return controller.searchOccupation(pattern);
+                          },
+                          itemBuilder: (context, OccupationList suggestion) {
+                            return ListTile(
+                              title: Text(suggestion.occupation ?? 'NA'),
+                            );
+                          },
+                          onSuggestionSelected: (OccupationList suggestion) {
+                            controller.selectedOccupation.value = suggestion;
+                            controller.occupationSearchController.text =
+                                suggestion.occupation ?? '';
+                          },
+                          validator: (val) =>
+                              controller.selectedOccupation.value == null
+                                  ? "Please select a occupation"
+                                  : null,
+                        );
                          return SizedBox();
                       }),
                       CustomTextField(
@@ -313,28 +313,28 @@ class InvestmentKycForm extends StatelessWidget {
                           return SizedBox();
                         }
 
-                        // return CustomTypeAheadFormField<QualificationList>(
-                        //   controller: controller.qualificationSearchController,
-                        //   labelText: "Qualification",
-                        //   hintText: "Search Qualification",
-                        //   suggestionsCallback: (pattern) async {
-                        //     return controller.searchQualification(pattern);
-                        //   },
-                        //   itemBuilder: (context, QualificationList suggestion) {
-                        //     return ListTile(
-                        //       title: Text(suggestion.qualification ?? 'NA'),
-                        //     );
-                        //   },
-                        //   onSuggestionSelected: (QualificationList suggestion) {
-                        //     controller.selectedQualification.value = suggestion;
-                        //     controller.qualificationSearchController.text =
-                        //         suggestion.qualification ?? '';
-                        //   },
-                        //   validator: (val) =>
-                        //       controller.selectedQualification.value == null
-                        //           ? "Please select a Qualification"
-                        //           : null,
-                        // );
+                        return CustomTypeAheadFormField<QualificationList>(
+                          controller: controller.qualificationSearchController,
+                          labelText: "Qualification",
+                          hintText: "Search Qualification",
+                          suggestionsCallback: (pattern) async {
+                            return controller.searchQualification(pattern);
+                          },
+                          itemBuilder: (context, QualificationList suggestion) {
+                            return ListTile(
+                              title: Text(suggestion.qualification ?? 'NA'),
+                            );
+                          },
+                          onSuggestionSelected: (QualificationList suggestion) {
+                            controller.selectedQualification.value = suggestion;
+                            controller.qualificationSearchController.text =
+                                suggestion.qualification ?? '';
+                          },
+                          validator: (val) =>
+                              controller.selectedQualification.value == null
+                                  ? "Please select a Qualification"
+                                  : null,
+                        );
                          return SizedBox();
                       }),
                       Obx(() {
@@ -342,57 +342,57 @@ class InvestmentKycForm extends StatelessWidget {
                           return SizedBox();
                         }
 
-                        // return CustomTypeAheadFormField<String>(
-                        //   controller: controller.companyTypeSearchController,
-                        //   labelText: "Company Type",
-                        //   hintText: "Search Company Type",
-                        //   suggestionsCallback: (pattern) async {
-                        //     return controller.searchCompanyType(pattern);
-                        //   },
-                        //   itemBuilder: (context, String suggestion) {
-                        //     return ListTile(
-                        //       title: Text(suggestion ?? 'NA'),
-                        //     );
-                        //   },
-                        //   onSuggestionSelected: (String suggestion) {
-                        //     controller.selectedCompanyType.value = suggestion;
-                        //     controller.companyTypeSearchController.text =
-                        //         suggestion ?? '';
-                        //   },
-                        //   validator: (val) =>
-                        //       controller.selectedCompanyType.value == null
-                        //           ? "Please select a Company Type"
-                        //           : null,
-                        // );
-                         return SizedBox();
+                        return CustomTypeAheadFormField<String>(
+                          controller: controller.companyTypeSearchController,
+                          labelText: "Company Type",
+                          hintText: "Search Company Type",
+                          suggestionsCallback: (pattern) async {
+                            return controller.searchCompanyType(pattern);
+                          },
+                          itemBuilder: (context, String suggestion) {
+                            return ListTile(
+                              title: Text(suggestion ?? 'NA'),
+                            );
+                          },
+                          onSuggestionSelected: (String suggestion) {
+                            controller.selectedCompanyType.value = suggestion;
+                            controller.companyTypeSearchController.text =
+                                suggestion ?? '';
+                          },
+                          validator: (val) =>
+                              controller.selectedCompanyType.value == null
+                                  ? "Please select a Company Type"
+                                  : null,
+                        );
+                       
                       }),
                       Obx(() {
                         if (controller.companyNameList.isEmpty) {
                           return SizedBox();
                         }
-                        // return CustomTypeAheadFormField<Company>(
-                        //   controller: controller.companyNameSearchController,
-                        //   labelText: "Company Name",
-                        //   hintText: "Search Company Name",
-                        //   suggestionsCallback: (pattern) async {
-                        //     return controller.searchCompanyName(pattern);
-                        //   },
-                        //   itemBuilder: (context, Company suggestion) {
-                        //     return ListTile(
-                        //       title: Text(suggestion.companyName ?? 'NA'),
-                        //     );
-                        //   },
-                        //   onSuggestionSelected: (Company suggestion) {
-                        //     controller.selectedCompanyName.value = suggestion;
-                        //     controller.companyNameSearchController.text =
-                        //         suggestion.companyName ?? '';
-                        //   },
-                        //   validator: (val) =>
-                        //       controller.selectedCompanyName.value == null
-                        //           ? "Please select a company name"
-                        //           : null,
-                        // );
-                         return SizedBox();
+                        return CustomTypeAheadFormField<Company>(
+                          controller: controller.companyNameSearchController,
+                          labelText: "Company Name",
+                          hintText: "Search Company Name",
+                          suggestionsCallback: (pattern) async {
+                            return controller.searchCompanyName(pattern);
+                          },
+                          itemBuilder: (context, Company suggestion) {
+                            return ListTile(
+                              title: Text(suggestion.companyName ?? 'NA'),
+                            );
+                          },
+                          onSuggestionSelected: (Company suggestion) {
+                            controller.selectedCompanyName.value = suggestion;
+                            controller.companyNameSearchController.text =
+                                suggestion.companyName ?? '';
+                          },
+                          validator: (val) =>
+                              controller.selectedCompanyName.value == null
+                                  ? "Please select a company name"
+                                  : null,
+                        );
+                      
                       }),
                     ] else ...[
                       Text(
@@ -434,29 +434,29 @@ class InvestmentKycForm extends StatelessWidget {
                           return SizedBox();
                         }
 
-                        // return CustomTypeAheadFormField<BankList>(
-                        //   controller: controller.searchBnakNameSearchController,
-                        //   labelText: "Bank Name",
-                        //   hintText: "Bank Name",
-                        //   suggestionsCallback: (pattern) async {
-                        //     return controller.searchBankName(pattern);
-                        //   },
-                        //   itemBuilder: (context, BankList suggestion) {
-                        //     return ListTile(
-                        //       title: Text(suggestion.name ?? 'NA'),
-                        //     );
-                        //   },
-                        //   onSuggestionSelected: (BankList suggestion) {
-                        //     controller.selectedbankName.value = suggestion;
-                        //     controller.searchBnakNameSearchController.text =
-                        //         suggestion.name ?? '';
-                        //   },
-                        //   validator: (val) =>
-                        //       controller.selectedbankName.value == null
-                        //           ? "Please select a bank name"
-                        //           : null,
-                        // );
-                         return SizedBox();
+                        return CustomTypeAheadFormField<BankList>(
+                          controller: controller.searchBnakNameSearchController,
+                          labelText: "Bank Name",
+                          hintText: "Bank Name",
+                          suggestionsCallback: (pattern) async {
+                            return controller.searchBankName(pattern);
+                          },
+                          itemBuilder: (context, BankList suggestion) {
+                            return ListTile(
+                              title: Text(suggestion.name ?? 'NA'),
+                            );
+                          },
+                          onSuggestionSelected: (BankList suggestion) {
+                            controller.selectedbankName.value = suggestion;
+                            controller.searchBnakNameSearchController.text =
+                                suggestion.name ?? '';
+                          },
+                          validator: (val) =>
+                              controller.selectedbankName.value == null
+                                  ? "Please select a bank name"
+                                  : null,
+                        );
+                    
                       }),
                       CustomTextField(
                         controller: controller.ifscCodeController,

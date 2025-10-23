@@ -1,9 +1,12 @@
+import 'dart:convert';
+
 import 'package:antpay_lite/api/auth_token.dart';
 import 'package:antpay_lite/api/comman_api_repo.dart';
 import 'package:antpay_lite/custom_widget/custom_url_launcher.dart';
 import 'package:antpay_lite/model/billpay/getBillers.dart';
 import 'package:antpay_lite/model/offer/game_zone_model.dart';
 import 'package:antpay_lite/model/offer/homebanner.dart';
+import 'package:antpay_lite/model/payment/customer_load_balance.dart';
 import 'package:antpay_lite/model/wallet/CheckUserRequestModelPayu.dart';
 import 'package:antpay_lite/model/wallet/CheckUserResponseModelPayu.dart';
 import 'package:antpay_lite/prefrences/session_manager.dart';
@@ -11,6 +14,7 @@ import 'package:antpay_lite/repository/login_repository/miniAccountRepo/mini_acc
 import 'package:antpay_lite/utils/app_constant.dart';
 import 'package:antpay_lite/utils/common_utils.dart';
 import 'package:antpay_lite/viewmodels/antpay_socialnews_controller/antpay_socialnews_controller.dart';
+import 'package:antpay_lite/views/failure_success_screen.dart';
 import 'package:antpay_lite/views/p2p_lending/investment_dashboard_screen.dart';
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:flutter/material.dart';
@@ -24,7 +28,8 @@ import '../../model/walletservice/announcement_model.dart';
 import '../../repository/login_repository/homeScreenRepo/banner_repository.dart';
 import '../../utils/routes/routes_name.dart';
 
-class HomeContoller extends GetxController {
+class HomeContoller extends GetxController with WidgetsBindingObserver {
+    bool isloadAccount = false;
   CommonApiRepo repoClass = CommonApiRepo();
   final AntpaySocialController antpaySocialController =
       Get.put(AntpaySocialController());
@@ -38,7 +43,8 @@ class HomeContoller extends GetxController {
   var userRetriveData = CheckUserResponseModelPayu().obs;
   List<PaymentCard>? cardListData = <PaymentCard>[].obs;
   List<ServiceResultModel> billIconData = <ServiceResultModel>[].obs;
-  PaymentCard? cardDetails;
+  var cardDetails = Rxn<PaymentCard>();
+
   List<Subwallet>? walletDetails;
 
 // banner
@@ -68,7 +74,7 @@ class HomeContoller extends GetxController {
     getGameZoneBanner();
     // antpaySocialController.getAntpaySocialnewsdata();
     antpaySocialController.getAntpaySocialNews();
-
+  WidgetsBinding.instance.addObserver(this);
     getCustomerRecord();
     getPointBalance();
     getAnnouncementsData();
@@ -148,7 +154,7 @@ class HomeContoller extends GetxController {
         // } else {
         //   Get.toNamed(RoutesName.miniAccPhonePage);
         // }
-         Get.toNamed(RoutesName.accountDetails);
+        Get.toNamed(RoutesName.accountDetails);
         break;
       case 1:
         Get.toNamed(RoutesName.creditLineView);
@@ -268,7 +274,7 @@ class HomeContoller extends GetxController {
     });
   }
 
-  void getCustomerRecord() async {
+  getCustomerRecord() async {
     try {
       isLoading.value = true;
 
@@ -286,20 +292,16 @@ class HomeContoller extends GetxController {
         data,
       );
 
-
-     
-
-
+      print("retreive data ${response.customerId}");
 
       if (response.responseCode.toString() == '00') {
-
         SessionManager().addKYC(response.kycName.toString());
         isCardShow.value = true;
         isnewuser.value = false;
-              kycResponseCode = response.responseCode.toString();
-      kycName = response.kycName.toString();
-      kycAccountStatus =
-          response.cardList!.first.subwalletListDetails!.first.accountStatus;
+        kycResponseCode = response.responseCode.toString();
+        kycName = response.kycName.toString();
+        kycAccountStatus =
+            response.cardList!.first.subwalletListDetails!.first.accountStatus;
         userRetriveData(response);
         if (response.cardList != null) {
           cardListData!.assignAll(userRetriveData.value.cardList!);
@@ -312,25 +314,30 @@ class HomeContoller extends GetxController {
         if (response.mpinExpired != null)
           SessionManager().addPayUMpinStatus(response.mpinExpired!);
 
-        cardDetails = response.cardList?.first;
+        cardDetails.value = response.cardList?.first;
+
         walletDetails = response.cardList?.first.subwalletListDetails;
         String? walletStatus = response.cardList!.first.statusDescription;
-
+        final loadaccountNumber = response
+                .cardList?.first.subwalletListDetails?.first.accountNumber ??
+            "";
+        SessionManager().addReterieveaccountNumber(loadaccountNumber);
         SessionManager().addPayUCustomerDetails(
-          customerId: response.customerId!,
-          clientId: response.clientId!,
-          urn: cardDetails!.urn!.toString(),
+          customerId: response.customerId.toString(),
+          clientId: response.clientId.toString(),
+          urn: cardDetails.value?.urn?.toString() ?? "",
           email: response.email!,
-          cardNumber: cardDetails!.cardNumber!,
-          last4Digits: cardDetails!.lastFourDigit!,
+          cardNumber: cardDetails.value?.cardNumber ?? "",
+          last4Digits: cardDetails.value?.lastFourDigit ?? "",
           kycType: response.kycName!,
-          uniqueNumberValidity: cardDetails!.uniqueNumberValidity!,
+          uniqueNumberValidity: cardDetails.value?.uniqueNumberValidity ?? "",
           walletAccountNumber: walletDetails!.first.accountNumber!,
           walletId: walletDetails!.first.subwalletId!,
           accountBalance: CommonUtils.convertAmountToRupees(
-              cardDetails!.availableBalance!.toString()),
+              cardDetails.value?.availableBalance!.toString()),
           walletStatus: walletStatus.toString(),
         );
+      
       } else {
         userRetriveData(null);
         isCardShow.value = false;
@@ -338,6 +345,85 @@ class HomeContoller extends GetxController {
       }
     } catch (e) {
       // CustomToast.show(e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> callAddMoneyApi() async {
+    try {
+      isLoading.value = true;
+
+      String? customerId = await SessionManager().getPayUCustomerId();
+      if (customerId == null || customerId.isEmpty) {
+        // CustomToast.show("Customer ID not found");
+        return;
+      }
+
+      CommonApiRepo repoClass = CommonApiRepo();
+      Map orderdata = SessionManager().getGenerateOrderResponse();
+
+      final data = CustomerLoadbalanceRequest(
+        accountNumber: SessionManager().getReterieveaccountNumber(),
+        customerId: customerId,
+        implType: "PG_TU_I",
+        implId: "I|70190",
+        transactionAmount: ((double.tryParse(
+                        orderdata[SessionManager.INVESTMENT_AMOUNT]
+                                ?.toString() ??
+                            '0') ??
+                    0) *
+                100)
+            .toInt(),
+        sourceType: 0,
+        sender: "PayU PG",
+        sourceAccount: "27389282",
+        loadCurrency: "INR",
+        fundFlowType: "I",
+        fee: 0,
+        antTxnId: SessionManager().getAntTxnId(),
+        mobile: SessionManager().getMobile(),
+        remark: "remark",
+        paymentMethod: "PG",
+        payuResponse: SessionManager().getPayUResponse(),
+        transactionResult: SessionManager().getTranscationResult(),
+        transactionType: "Load",
+        pgNo: SessionManager().getAntTxnId(),
+        aParam: AppConstant.generateAuthParam(
+            SessionManager().getMobile().toString()),
+        tagName: "ppi-wallet_payment",
+      );
+
+      var response = await repoClass.apiClient.customerloadaccount(
+        AuthToken.getAuthToken(),
+        SessionManager().getToken().toString(),
+        data,
+      );
+
+      final decodedResponse =
+          response is String ? jsonDecode(response) : response;
+
+      if (decodedResponse['status'] == 1 ||
+          decodedResponse['responseCode'] == '00') {
+  await getCustomerRecord();
+      Get.to(
+    () =>  FailureSuccessScreen(),
+    arguments: {
+      'success': true,
+      'message': decodedResponse['msg'] ?? 'Load Money Successful',
+      'amount': (data.transactionAmount ?? 0) / 100,
+      'transferTo': data.sourceAccount ?? '',
+      "transactionType":data.transactionType??"",
+      'transactionId': decodedResponse['accosaTransactionId'] ?? '',
+      'transactionDate': decodedResponse['responseDateTime'] ?? '',
+    },
+  );
+      } else {
+      
+  CustomToast.show(decodedResponse['msg']);
+      }
+    } catch (e) {
+      print("Error in callAddMoneyApi: $e");
     } finally {
       isLoading.value = false;
     }
@@ -477,22 +563,23 @@ class HomeContoller extends GetxController {
       case 0:
         Get.toNamed(RoutesName.rechargeHomeScreen);
         break;
-         case 1:
+      case 1:
         SessionManager().addServicetype("Life Insurance");
         Get.toNamed(RoutesName.bharatBillPayTemplateView);
         break;
-         case 2:
+      case 2:
         SessionManager().addServicetype("Motor Insurance");
         Get.toNamed(RoutesName.bharatBillPayTemplateView);
         break;
-         case 3:
+      case 3:
         SessionManager().addServicetype("Health Insurance");
         Get.toNamed(RoutesName.bharatBillPayTemplateView);
         break;
 
       case 4:
-         SessionManager().addServicetype("Loan Repayment");
-        Get.toNamed(RoutesName.bharatBillPayTemplateView, arguments: {'tabIndex': "0"});
+        SessionManager().addServicetype("Loan Repayment");
+        Get.toNamed(RoutesName.bharatBillPayTemplateView,
+            arguments: {'tabIndex': "0"});
         break;
 
       case 5:
@@ -508,5 +595,26 @@ class HomeContoller extends GetxController {
       default:
         CustomToast.show("Comming soon");
     }
+  }
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
+        WidgetsBinding.instance.removeObserver(this);
+  }
+    @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (state == AppLifecycleState.resumed) {
+  
+      if (!isloadAccount &&
+          SessionManager().getTranscationResult() == AppConstant.RESULT_OK) {
+        isloadAccount = true;
+        await callAddMoneyApi();
+      }
+    }
+
+    if (state == AppLifecycleState.inactive) print("inactive");
+    if (state == AppLifecycleState.detached) print("detached");
+    if (state == AppLifecycleState.paused) print("paused");
   }
 }
