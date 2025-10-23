@@ -56,7 +56,7 @@ class NotificationController extends GetxController {
       case "loan":
       case "Personal_Loan":
       case "Home_Loan":
-        // Get.toNamed(RoutesName.applyLoan);
+        Get.toNamed(RoutesName.loanhomescreen);
         break;
 
       case "Health Insurance":
@@ -91,23 +91,23 @@ class NotificationController extends GetxController {
 
       case "credit_card":
       case "Credit_Card":
-        // Get.toNamed(RoutesName.creditCard);
+        Get.toNamed(RoutesName.creditCardFormView);
         break;
 
       case "Investment":
-        // Get.toNamed(RoutesName.investment);
+        Get.toNamed(RoutesName.investmentHomeView);
         break;
 
       case "Business_Loans":
-        // Get.toNamed(RoutesName.businessLoan);
+        Get.toNamed(RoutesName.businessloanform);
         break;
 
       case "Car_Loan":
-        // Get.toNamed(RoutesName.carLoan);
+        Get.toNamed(RoutesName.carloanform);
         break;
 
       case "Fixed_Deposit":
-        // Get.toNamed(RoutesName.fixedDeposit);
+        // Get.toNamed(RoutesName.fixedDeposit
         break;
 
       case "Mutul_Fund":
@@ -115,7 +115,7 @@ class NotificationController extends GetxController {
         break;
 
       case "P2p_Micro Finance":
-        // Get.toNamed(RoutesName.p2pFinance);
+        Get.toNamed(RoutesName.p2pLending);
         break;
 
       case "Term_Insurance":

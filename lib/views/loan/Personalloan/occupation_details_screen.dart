@@ -1,4 +1,3 @@
-import 'package:antpay_lite/custom_widget/custom_appbar.dart';
 import 'package:antpay_lite/custom_widget/custom_dropdown.dart';
 import 'package:antpay_lite/custom_widget/custom_textfield.dart';
 import 'package:antpay_lite/custom_widget/customstyles.dart';
@@ -24,7 +23,6 @@ class OccupationDetailsScreen extends StatelessWidget {
     final loanType = args?['loanType'] ?? 'Personal Loan';
     final loanName = args?['loanName'] ?? 'Personal Loan';
     return MainScaffold(
-     
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 20),
         child: Form(
@@ -86,41 +84,40 @@ class OccupationDetailsScreen extends StatelessWidget {
                       return SizedBox();
                     }
 
-                    // return CustomTypeAheadFormField<Company>(
-                    //   controller: occuptiondetailsController
-                    //       .companyNameSearchController,
-                    //   labelText: "Copany Name",
-                    //   hintText: "Search Company Name",
-                    //   suggestionsCallback: (pattern) async {
-                    //     return occuptiondetailsController
-                    //         .searchCompanyName(pattern);
-                    //   },
-                    //   itemBuilder: (context, Company suggestion) {
-                    //     return Padding(
-                    //       padding: const EdgeInsets.symmetric(
-                    //           horizontal: 10, vertical: 10),
-                    //       child: Text(
-                    //         suggestion.companyName ?? "NA",
-                    //         style: const TextStyle(
-                    //           fontSize: 12,
-                    //           fontWeight: FontWeight.w300,
-                    //         ),
-                    //       ),
-                    //     );
-                    //   },
-                    //   onSuggestionSelected: (Company suggestion) {
-                    //     occuptiondetailsController.selectedCompanyName.value =
-                    //         suggestion;
-                    //     occuptiondetailsController.companyNameSearchController
-                    //         .text = suggestion.companyName ?? '';
-                    //   },
-                    //   validator: (val) => occuptiondetailsController
-                    //               .selectedCompanyName.value ==
-                    //           null
-                    //       ? "Please select a company name"
-                    //       : null,
-                    // );
-                    return SizedBox();
+                    return CustomTypeAheadFormField<Company>(
+                      controller: occuptiondetailsController
+                          .companyNameSearchController,
+                      labelText: "Copany Name",
+                      hintText: "Search Company Name",
+                      suggestionsCallback: (pattern) async {
+                        return occuptiondetailsController
+                            .searchCompanyName(pattern);
+                      },
+                      itemBuilder: (context, Company suggestion) {
+                        return Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 10),
+                          child: Text(
+                            suggestion.companyName ?? "NA",
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                        );
+                      },
+                      onSuggestionSelected: (Company suggestion) {
+                        occuptiondetailsController.selectedCompanyName.value =
+                            suggestion;
+                        occuptiondetailsController.companyNameSearchController
+                            .text = suggestion.companyName ?? '';
+                      },
+                      validator: (val) => occuptiondetailsController
+                                  .selectedCompanyName.value ==
+                              null
+                          ? "Please select a company name"
+                          : null,
+                    );
                   }),
 
                   // const SizedBox(height: 10),

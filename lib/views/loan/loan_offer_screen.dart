@@ -1,6 +1,4 @@
-import 'package:antpay_lite/custom_widget/custom_appbar.dart';
 import 'package:antpay_lite/custom_widget/custom_loader.dart';
-import 'package:antpay_lite/custom_widget/customstyles.dart';
 import 'package:antpay_lite/viewmodels/loan/loan_offer_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,29 +13,30 @@ class LoanOfferScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MainScaffold(
-      
       body: Obx(() => SingleChildScrollView(
             padding: const EdgeInsets.all(10.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Loan Status Card
-                if (controller.isLoadingStatus.value)
-                  const Center(
-                    child: Customloader(),
-                  )
-                else if (controller.loanStatus.value == null)
-                  const Center(
-                    child: Text(
-                      "Failed to fetch loan status.",
-                      style: TextStyle(fontSize: 16, color: Colors.black54),
-                    ),
-                  )
-                else
-                  buildLoanStatusCard(),
+                Obx(() {
+                  // 1. log the current value
+                  print('LOAN-STATUS VALUE: ${controller.loanStatus.value}');
 
+                  // 2. existing UI tree
+                  if (controller.isLoadingStatus.value) {
+                    return const Center(child: Customloader());
+                  } else if (controller.loanStatus.value == null) {
+                    return const Center(
+                      child: Text(
+                        "Failed to fetch loan status.",
+                        style: TextStyle(fontSize: 16, color: Colors.black54),
+                      ),
+                    );
+                  } else {
+                    return buildLoanStatusCard();
+                  }
+                }),
                 const SizedBox(height: 5),
-
                 Padding(
                   padding: const EdgeInsets.only(bottom: 10.0),
                   child: Column(
@@ -55,7 +54,6 @@ class LoanOfferScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-
                 if (controller.isLoadingOffers.value)
                   const Center(
                     child: Customloader(),
@@ -204,10 +202,10 @@ class LoanOfferScreen extends StatelessWidget {
 
   Widget buildLoanStatusCard() {
     final appliedLoanAmount =
-        controller.loanStatus.value?['applied_loan_amount'] ?? 'N/A';
-    final status = controller.loanStatus.value?['msg'] ?? 'N/A';
+        controller.loanStatus.value?['applied_loan_amount'] ?? 'Not Available';
+    final status = controller.loanStatus.value?['msg'] ?? 'Unknown';
     final approvedLoanAmount =
-        controller.loanStatus.value?['approve_loan_amount'] ?? 'N/A';
+        controller.loanStatus.value?['approve_loan_amount'] ?? 'Not Available';
 
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 10.0),
@@ -227,7 +225,7 @@ class LoanOfferScreen extends StatelessWidget {
                   style: TextStyle(fontSize: 16, color: Colors.black87),
                 ),
                 Text(
-                  '$appliedLoanAmount',
+                  appliedLoanAmount,
                   style: const TextStyle(fontSize: 16, color: Colors.black87),
                 ),
               ],

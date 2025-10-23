@@ -40,9 +40,7 @@ class LoanOfferController extends GetxController {
         await initLoanStatus(loanRequest);
       }
       await initLoanOffer(loanRequest);
-      print("loanOffers value after fetch: ${loanOffers.value}");
     } catch (e) {
-      print("fetchLoanData exception: $e at ${DateTime.now()}");
       CustomToast.show("Error loading data: $e");
     }
   }
@@ -50,20 +48,23 @@ class LoanOfferController extends GetxController {
   Future<void> initLoanStatus(LoanRequestModel loanRequestModel) async {
     try {
       isLoadingStatus.value = true;
-      final status = await repoClass.apiClient.getLoanStatus1(
+      final statusResponse = await repoClass.apiClient.getLoanStatus1(
         SessionManager().getToken().toString(),
         AuthToken.getAuthToken(),
         loanRequestModel,
       );
-      if (status != null &&
-          status is Map<String, dynamic> &&
-          status['status'] == 1) {
+      Map<String, dynamic>? status;
+      if (statusResponse is String) {
+        status = jsonDecode(statusResponse) as Map<String, dynamic>;
+      } else if (statusResponse is Map<String, dynamic>) {
+        status = statusResponse;
+      }
+      if (status != null && status['status'] == 1) {
         loanStatus.value = status;
       } else {
         loanStatus.value = {'msg': 'Failed to fetch status', 'status': 0};
       }
     } catch (e) {
-      loanStatus.value = {'msg': 'Error fetching status', 'status': 0};
       CustomToast.show("Error fetching loan status: $e");
     } finally {
       isLoadingStatus.value = false;
@@ -71,7 +72,6 @@ class LoanOfferController extends GetxController {
   }
 
   Future<void> initCarLoanStatus(LoanRequestModel loanRequestModel) async {
-    print('this is inside carLoanStatus at ${DateTime.now()}');
     try {
       isLoadingStatus.value = true;
       final status = await repoClass.apiClient.getLoanStatus1(
@@ -79,7 +79,6 @@ class LoanOfferController extends GetxController {
         AuthToken.getAuthToken(),
         loanRequestModel,
       );
-      print("Car Loan Status Response: $status at ${DateTime.now()}");
       if (status != null &&
           status is Map<String, dynamic> &&
           status['status'] == 1) {
@@ -91,7 +90,6 @@ class LoanOfferController extends GetxController {
         };
       }
     } catch (e) {
-      print("Error fetching car loan status: $e at ${DateTime.now()}");
       loanStatus.value = {'msg': 'Error fetching car loan status', 'status': 0};
       CustomToast.show("Error fetching car loan status: $e");
     } finally {
@@ -107,7 +105,6 @@ class LoanOfferController extends GetxController {
         AuthToken.getAuthToken(),
         loanRequestModel,
       );
-      print("Raw Loan Offers Response: $offersResponse at ${DateTime.now()}");
       if (offersResponse != null) {
         final String responseText = offersResponse is String
             ? offersResponse
@@ -123,17 +120,13 @@ class LoanOfferController extends GetxController {
                   ?.map((item) => item as Map<String, dynamic>)
                   .toList() ??
               [];
-          print("Parsed loanOffers value: ${loanOffers.value}");
         } else {
           loanOffers.value = [];
-          print("No offers or invalid response, setting loanOffers to empty");
         }
       } else {
         loanOffers.value = [];
-        print("offersResponse is null, setting loanOffers to empty");
       }
     } catch (e) {
-      print("Error fetching loan offers: $e at ${DateTime.now()}");
       loanOffers.value = [];
       CustomToast.show("Error fetching loan offers: $e");
     } finally {
