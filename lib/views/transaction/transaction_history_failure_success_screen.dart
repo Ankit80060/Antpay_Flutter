@@ -30,86 +30,88 @@ class TransactionFailureSuccessScreen extends StatelessWidget {
             ? "assets/images/investment_sucess.png"
             : "assets/images/investment_fail.png";
 
-        return Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            children: [
-              Card(
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
-                elevation: 2,
-                clipBehavior: Clip.hardEdge,
-                child: CachedNetworkImage(
-              imageUrl:   'https://firebasestorage.googleapis.com/v0/b/antpay-ae6e5.appspot.com/o/PhysicalDebitCardBanner%2Fphysical-debitcard-banr.png?alt=media',
-                 placeholder: (context, url) =>
-                                                    const Center(
-                                                  child: SizedBox(
-                                                    height: 20,
-                                                    width: 20,
-                                                    child: Customloader(),
+        return SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              children: [
+                Card(
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(6)),
+                  elevation: 2,
+                  clipBehavior: Clip.hardEdge,
+                  child: CachedNetworkImage(
+                imageUrl:   'https://firebasestorage.googleapis.com/v0/b/antpay-ae6e5.appspot.com/o/PhysicalDebitCardBanner%2Fphysical-debitcard-banr.png?alt=media',
+                   placeholder: (context, url) =>
+                                                      const Center(
+                                                    child: SizedBox(
+                                                      height: 20,
+                                                      width: 20,
+                                                      child: Customloader(),
+                                                    ),
                                                   ),
-                                                ),
-                                                errorWidget:
-                                                    (context, url, error) =>
-                                                        Container(
-                                                  color: Colors.grey.shade300,
-                                                  alignment: Alignment.center,
-                                                  child: const Icon(
-                                                    Icons.broken_image,
-                                                    color: Colors.grey,
-                                                    size: 40,
+                                                  errorWidget:
+                                                      (context, url, error) =>
+                                                          Container(
+                                                    color: Colors.grey.shade300,
+                                                    alignment: Alignment.center,
+                                                    child: const Icon(
+                                                      Icons.broken_image,
+                                                      color: Colors.grey,
+                                                      size: 40,
+                                                    ),
                                                   ),
-                                                ),
-                  fit: BoxFit.cover,
-                  height: 180,
-                  width: double.infinity,
+                    fit: BoxFit.cover,
+                    height: 180,
+                    width: double.infinity,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 10),
-              Container(
-                height: 400,
-                alignment: Alignment.center,
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.grey.shade300),
+                const SizedBox(height: 10),
+                Container(
+                  height: 400,
+                  alignment: Alignment.center,
+                  padding: const EdgeInsets.all(10),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.grey.shade300),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Transaction History", style: CustomStyles.black13500),
+                          Text(controller.isSuccess ? "SUCCESS" : "INITIALIZE", style: CustomStyles.black13500),
+                        ],
+                      ),
+                      const SizedBox(height: 40),
+                      Image(
+                        width: double.infinity,
+                        height: 80,
+                        image: AssetImage(imageAsset),
+                      ),
+                      const SizedBox(height: 30),
+                      const Divider(color: Colors.grey),
+                      InfoRow(heading: "Transaction ID", value: details.transactionNo ?? ""),
+                      InfoRow(heading: "Beneficiary Number", value: details.mobile ?? ""),
+                      InfoRow(heading: "Amount", value: "₹ ${details.amount ?? 0}"),
+                      InfoRow(heading: "Processing Fee", value: "₹ ${details.feeRate ?? 0}"),
+                      InfoRow(heading: "Payment Method", value: details.service ?? ""),
+                      InfoRow(heading: "Payment ID", value: details.paymentId ?? ""),
+                      const Divider(color: Colors.grey),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text("Total Amount", style: CustomStyles.black13500),
+                          Text("₹ ${controller.totalAmount.value}", style: CustomStyles.black13500),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("Transaction History", style: CustomStyles.black13500),
-                        Text(controller.isSuccess ? "SUCCESS" : "INITIALIZE", style: CustomStyles.black13500),
-                      ],
-                    ),
-                    const SizedBox(height: 40),
-                    Image(
-                      width: double.infinity,
-                      height: 80,
-                      image: AssetImage(imageAsset),
-                    ),
-                    const SizedBox(height: 30),
-                    const Divider(color: Colors.grey),
-                    InfoRow(heading: "Transaction ID", value: details.transactionNo ?? ""),
-                    InfoRow(heading: "Beneficiary Number", value: details.mobile ?? ""),
-                    InfoRow(heading: "Amount", value: "₹ ${details.amount ?? 0}"),
-                    InfoRow(heading: "Processing Fee", value: "₹ ${details.feeRate ?? 0}"),
-                    InfoRow(heading: "Payment Method", value: details.service ?? ""),
-                    InfoRow(heading: "Payment ID", value: details.paymentId ?? ""),
-                    const Divider(color: Colors.grey),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text("Total Amount", style: CustomStyles.black13500),
-                        Text("₹ ${controller.totalAmount.value}", style: CustomStyles.black13500),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         );
       }),

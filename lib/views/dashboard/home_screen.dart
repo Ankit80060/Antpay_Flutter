@@ -490,21 +490,20 @@ class HomeScreen extends StatelessWidget {
                                               style: CustomStyles.dblue12300),
                                         ],
                                       ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                              "${homecontroller.userRetriveData.value.firstName} "
-                                                      " ${homecontroller.userRetriveData.value.lastName}" ??
-                                                  "",
-                                              style: CustomStyles.dblue12500),
-                                          Text(
-                                            "${CommonMethodUtils.currencyFormatter.format((homecontroller.cardDetails?.availableBalance ?? 0) / 100)}",
-                                            style: CustomStyles.dblue12500,
-                                          )
-                                        ],
-                                      ),
+                                   Obx(() => Row(
+  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  children: [
+    Text(
+      "${homecontroller.userRetriveData.value.firstName ?? ""} ${homecontroller.userRetriveData.value.lastName ?? ""}",
+      style: CustomStyles.dblue12500,
+    ),
+    Text(
+      "${CommonMethodUtils.currencyFormatter.format((homecontroller.cardDetails.value?.availableBalance ?? 0) / 100)}",
+      style: CustomStyles.dblue12500,
+    ),
+  ],
+))
+,
                                       const SizedBox(
                                         height: 7,
                                       ),
@@ -523,13 +522,13 @@ class HomeScreen extends StatelessWidget {
                                             MainAxisAlignment.spaceBetween,
                                         children: [
                                           Text(
-                                              homecontroller.cardDetails
+                                              homecontroller.cardDetails.value
                                                       ?.cardNumber ??
                                                   "",
                                               style: CustomStyles.dblue12500),
                                           Text(
                                               CommonMethodUtils.formatValidUpto(
-                                                  homecontroller.cardDetails
+                                                  homecontroller.cardDetails.value
                                                           ?.uniqueNumberValidity ??
                                                       ""),
                                               style: CustomStyles.dblue12500),

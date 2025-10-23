@@ -1,3 +1,4 @@
+import 'package:antpay_lite/custom_widget/custom_appbar.dart';
 import 'package:antpay_lite/custom_widget/custom_button.dart';
 import 'package:antpay_lite/custom_widget/custom_shape.dart';
 import 'package:antpay_lite/custom_widget/customstyles.dart';
@@ -17,15 +18,15 @@ import '../../viewmodels/account_transfer_controller/account_transfer_beneficall
 class ConfirmMPINScreen extends StatelessWidget {
   ConfirmMPINScreen({super.key});
   final controller = Get.put(ConfirmMpinController());
-    final accountTranferController =
+  final accountTranferController =
       Get.put(AccountTransferBeneficaillyController());
 
   @override
   Widget build(BuildContext context) {
-var beneficiaryData = Get.arguments;
-
+    var beneficiaryData = Get.arguments;
 
     return Scaffold(
+      appBar: CustomAppbar(showBackIcon: true,),
       backgroundColor: CustomStyles.bgcolor,
       resizeToAvoidBottomInset: false,
       body: Stack(
@@ -111,13 +112,13 @@ var beneficiaryData = Get.arguments;
                       controller: controller.mpinController,
                       inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                       textInputAction: TextInputAction.done,
+                       autofillHints: const [], 
                       showCursor: true,
                     ),
                     const SizedBox(height: 30),
                     CustomElevatedButton(
                       text: "Confirm MPIN",
                       onPressed: () async {
-                  
                         VerifyW2ACredentialsRequest request =
                             VerifyW2ACredentialsRequest(
                           mobileNumber: SessionManager().getMobile().toString(),
@@ -129,22 +130,19 @@ var beneficiaryData = Get.arguments;
                               .getPayUCustomerWalletTransferToken(),
                         );
 
-                            await controller.verifyW2ACredential(
-                                request,
-                               beneficiaryData,
-                                controller.mpinController.value.text);
-                        
+                        await controller.verifyW2ACredential(
+                            request,
+                            beneficiaryData,
+                            controller.mpinController.value.text);
 
-                         print(beneficiaryData.bankAccountNumber)  ;   
+                        print(beneficiaryData.bankAccountNumber);
                       },
                     ),
                     const SizedBox(height: 10),
                     InkWell(
-                      onTap: () async{
-                          accountTranferController.send2FAOtp(
-                                     "FORGOT");
-                      Get.toNamed(RoutesName.resetMpin,arguments: "FORGOT");
-                          
+                      onTap: () async {
+                        accountTranferController.send2FAOtp("FORGOT");
+                        Get.toNamed(RoutesName.resetMpin, arguments: "FORGOT");
                       },
                       child: RichText(
                         textAlign: TextAlign.center,

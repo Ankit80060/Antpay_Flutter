@@ -8,8 +8,10 @@ import 'package:antpay_lite/model/p2p_lending/InvestmentInvoiceRequest.dart';
 import 'package:antpay_lite/model/p2p_lending/InvestmentInvoiceResponse.dart';
 import 'package:antpay_lite/model/p2p_lending/social_payment_generate_order_model.dart';
 import 'package:antpay_lite/prefrences/session_manager.dart';
-import 'package:antpay_lite/views/payment_view/razoepay_payment_screen.dart';
+import 'package:antpay_lite/viewmodels/p2p_landing_controller/razorpay_payment_p2p.dart';
 import 'package:get/get.dart';
+
+import '../../views/payment_view/razoepay_payment_screen.dart';
 
 class InvestmentInvoiceDetailController extends GetxController {
   CommonApiRepo repoClass = CommonApiRepo();
@@ -67,51 +69,51 @@ class InvestmentInvoiceDetailController extends GetxController {
     }
   }
 
-  // Future<void> getGenerateOrder() async {
-  //   try {
-  //     isLoading(true);
+  Future<void> getGenerateOrder() async {
+    try {
+      isLoading(true);
 
-  //     final request = SocialPaymentGenerateOrderRequestModel(
-  //       amount: "1",
-  //       channel: 'PG',
-  //       mobile: SessionManager().getMobile().toString(),
-  //       service: 'social-lending',
-  //       source: CustomStyles.source,
-  //     );
+      final request = SocialPaymentGenerateOrderRequestModel(
+        amount: "1",
+        channel: 'PG',
+        mobile: SessionManager().getMobile().toString(),
+        service: 'social-lending',
+        source: CustomStyles.source,
+      );
 
-  //     SocialPaymentGenerateOrderResponseModel response =
-  //         await repoClass.apiClient.socialGenerateOrder(
-  //             SessionManager().getToken().toString(),
-  //             AuthToken.getAuthToken(),
-  //             request);
+      SocialPaymentGenerateOrderResponseModel response =
+          await repoClass.apiClient.socialGenerateOrder(
+              SessionManager().getToken().toString(),
+              AuthToken.getAuthToken(),
+              request);
 
-  //     if (response.status.toString() == "1") {
+      if (response.status.toString() == "1") {
     
-  //       SessionManager().addGnerateOrderResponse(
-  //         response.amount.toString(),
-  //         response.order_id.toString(),
-  //         response.api_key.toString(),
-  //         response.ant_txn_id.toString(),
-  //         response.pg_type.toString(),
-  //         "social-lending",
-  //       );
-  //       CustomToast.show(response.msg ?? "Order Generate Succesfully");
-  //       RazorpaySingleton().makePayment(
-  //         response.api_key!,
-  //         response.order_id!,
-  //         response.amount.toString(),
-  //         Get.context!,
-  //         "social-lending",
-  //       );
-  //     } else {
-  //       CustomToast.show("Failed to generate order");
-  //     }
-  //   } catch (e) {
-  //     print("❌ Error generating order: $e");
-  //   } finally {
-  //     isLoading(false);
-  //   }
-  // }
+        SessionManager().addGnerateOrderResponse(
+          response.amount.toString(),
+          response.order_id.toString(),
+          response.api_key.toString(),
+          response.ant_txn_id.toString(),
+          response.pg_type.toString(),
+          "social-lending",
+        );
+        CustomToast.show(response.msg ?? "Order Generate Succesfully");
+        RazorpaySingleton().makePayment(
+          response.api_key!,
+          response.order_id!,
+          response.amount.toString(),
+          Get.context!,
+          "social-lending",
+        );
+      } else {
+        CustomToast.show("Failed to generate order");
+      }
+    } catch (e) {
+      print("❌ Error generating order: $e");
+    } finally {
+      isLoading(false);
+    }
+  }
 
   @override
   void onInit() {

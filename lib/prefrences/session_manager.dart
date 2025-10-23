@@ -936,5 +936,12 @@ class SessionManager {
     return _pref.getString(WALLET_TRANSFER_ACCOUNT_NUMBER);
   }
 
-  
+ void addReterieveaccountNumber(String accountNumber) {
+  _pref.setString("account_number", accountNumber);
+}
+
+String? getReterieveaccountNumber() {
+  return _pref.getString("account_number");
+}
+
 }

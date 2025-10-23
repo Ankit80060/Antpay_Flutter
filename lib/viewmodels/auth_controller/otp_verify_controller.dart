@@ -19,16 +19,15 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:telephony_fix/telephony.dart';
 import '../../prefrences/session_manager.dart';
 
-
 class OTPVerifyController extends GetxController {
   final _otpRepo = OtpRepository();
-  final remainingTime = 120.obs;
+  final remainingTime = 180.obs;
   final showTime = ''.obs;
   final canResend = false.obs;
   final loading = false.obs;
-   RxString firebaseToken = ''.obs;
+  RxString firebaseToken = ''.obs;
   final TextEditingController pincontroller = TextEditingController();
-    late final deviceInfoSingleton;
+  late final deviceInfoSingleton;
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   final loginDetail = LoginModel();
@@ -41,7 +40,7 @@ class OTPVerifyController extends GetxController {
 
   final Telephony _telephony = Telephony.instance;
 
- void _initFirebaseToken() async {
+  void _initFirebaseToken() async {
     String? token = await _firebaseMessaging.getToken();
 
     if (token != null) {
@@ -53,17 +52,17 @@ class OTPVerifyController extends GetxController {
       firebaseToken.value = newToken;
     });
   }
+
 //lifecycle
   @override
   void onInit() {
     super.onInit();
-    startTimer(120);
- 
+    startTimer(180);
+
     _initFirebaseToken();
     deviceInfoSingleton = DeviceInfoSingleton();
     _listenIncomingSms();
   }
-
 
   @override
   void onClose() {
@@ -75,7 +74,7 @@ class OTPVerifyController extends GetxController {
   }
 
   // Timer Functions
-   startTimer(int seconds) {
+  startTimer(int seconds) {
     remainingTime.value = seconds;
     canResend.value = false;
 
@@ -100,7 +99,7 @@ class OTPVerifyController extends GetxController {
 
   void resetTimer() {
     _timer?.cancel();
-    startTimer(120);
+    startTimer(180);
   }
 
   Map setDataFields(LoginModel loginDetail) {
@@ -142,34 +141,32 @@ class OTPVerifyController extends GetxController {
     }
   }
 
-Future<void> resendOtp() async {
-  if (!canResend.value) return;
+  Future<void> resendOtp() async {
+    if (!canResend.value) return;
 
-  loading.value = true;
-  userData = setDataFields(loginDetail);
+    loading.value = true;
+    userData = setDataFields(loginDetail);
 
-  _otpRepo.sendotp(jsonEncode(userData)).then((value) async {
-    loading.value = false;
-    await saveUserPrefs(value);
-    userResponse = UserModel.fromJson(value);
+    _otpRepo.sendotp(jsonEncode(userData)).then((value) async {
+      loading.value = false;
+      await saveUserPrefs(value);
+      userResponse = UserModel.fromJson(value);
 
-    print("User Response: ${userResponse.toJson()}");
-    print("Resend OTP response: status = ${userResponse.status}, msg = ${userResponse.msg}");
+      print("User Response: ${userResponse.toJson()}");
+      print(
+          "Resend OTP response: status = ${userResponse.status}, msg = ${userResponse.msg}");
 
-    if (userResponse.status.toString() == '1'
-      ) {
-      CustomToast.show("OTP resent successfully");
-      resetTimer();
-    } else {
-      CustomToast.show(userResponse.msg ?? "Something went wrong");
-    }
-  }).onError((error, stackTrace) {
-    loading.value = false;
-    debugPrint("Resend OTP Error: $error");
-  });
-}
-
-
+      if (userResponse.status.toString() == '1') {
+        CustomToast.show("OTP resent successfully");
+        resetTimer();
+      } else {
+        CustomToast.show(userResponse.msg ?? "Something went wrong");
+      }
+    }).onError((error, stackTrace) {
+      loading.value = false;
+      debugPrint("Resend OTP Error: $error");
+    });
+  }
 
   Future<void> _listenIncomingSms() async {
     if (Platform.isAndroid) {

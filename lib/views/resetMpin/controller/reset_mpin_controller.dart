@@ -215,6 +215,7 @@ void sendOtpStatusBase() async {
       actionStatus.value = "RESET";
       oldMpinController.clear();
       newMpinController.clear();
+      
     } else {
       actionStatus.value = "FORGOT";
       oldMpinController.clear();

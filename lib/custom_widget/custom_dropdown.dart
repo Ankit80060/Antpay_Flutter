@@ -1,6 +1,7 @@
 import 'package:antpay_lite/custom_widget/customstyles.dart';
 import 'package:flutter/material.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 
 class CustomDropdown<T> extends StatelessWidget {
   final List<T> items;
@@ -257,86 +258,86 @@ class CustomDropdownFormField<T> extends StatelessWidget {
 
 
 
-// class CustomTypeAheadFormField<T> extends StatelessWidget {
-//   final TextEditingController controller;
-//   final String? labelText;
-//   final String? hintText;
-//   final FormFieldValidator<String>? validator;
-//   final Future<List<T>> Function(String) suggestionsCallback;
-//   final Widget Function(BuildContext, T) itemBuilder;
-//   final void Function(T) onSuggestionSelected;
-//   final TextStyle? textStyle;
+class CustomTypeAheadFormField<T> extends StatelessWidget {
+  final TextEditingController controller;
+  final String? labelText;
+  final String? hintText;
+  final FormFieldValidator<String>? validator;
+  final Future<List<T>> Function(String) suggestionsCallback;
+  final Widget Function(BuildContext, T) itemBuilder;
+  final void Function(T) onSuggestionSelected;
+  final TextStyle? textStyle;
 
-//   const CustomTypeAheadFormField({
-//     Key? key,
-//     required this.controller,
-//     required this.suggestionsCallback,
-//     required this.itemBuilder,
-//     required this.onSuggestionSelected,
-//     this.labelText,
-//     this.hintText,
-//     this.validator,
-//     this.textStyle,
-//   }) : super(key: key);
+  const CustomTypeAheadFormField({
+    Key? key,
+    required this.controller,
+    required this.suggestionsCallback,
+    required this.itemBuilder,
+    required this.onSuggestionSelected,
+    this.labelText,
+    this.hintText,
+    this.validator,
+    this.textStyle,
+  }) : super(key: key);
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Padding(
-//       padding: const EdgeInsets.symmetric(vertical: 5),
-//       child: Column(
-//         crossAxisAlignment: CrossAxisAlignment.start,
-//         children: [
-//           if (labelText != null)
-//             Text(labelText!, style: CustomStyles.black12400),
-//           if (labelText != null) const SizedBox(height: 5.0),
-//           TypeAheadFormField<T>(
-//             validator: validator,
-//             textFieldConfiguration: TextFieldConfiguration(
-//               controller: controller,
-//               decoration: InputDecoration(
-//                 hintText: hintText,
-//                 isDense: true,
-//                 hintStyle: textStyle?.copyWith(color: Colors.grey) ??
-//                     CustomStyles.black12400.copyWith(color: Colors.grey),
-//                 contentPadding:
-//                     const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-//                 filled: true,
-//                 fillColor: Colors.white,
-//                 border: OutlineInputBorder(
-//                   borderSide: BorderSide(color: AppColors.black54),
-//                   borderRadius: BorderRadius.circular(5),
-//                 ),
-//                 enabledBorder: OutlineInputBorder(
-//                   borderRadius: BorderRadius.circular(5),
-//                   borderSide: BorderSide(
-//                       color: AppColors.black54.withOpacity(0.2)),
-//                 ),
-//                 focusedBorder: OutlineInputBorder(
-//                   borderRadius: BorderRadius.circular(5),
-//                   borderSide: BorderSide(
-//                       color: AppColors.dblue.withOpacity(0.8)),
-//                 ),
-//                 counterText: '',
-//               ),
-//               style: textStyle ?? CustomStyles.black12400,
-//               cursorColor: Colors.red,
-//               cursorWidth: 1,
-//             ),
-//             suggestionsCallback: suggestionsCallback,
-//             itemBuilder: (context, suggestion) => itemBuilder(context, suggestion),
-//             onSuggestionSelected: (suggestion) =>
-//                 onSuggestionSelected(suggestion),
-//             noItemsFoundBuilder: (context) => const Padding(
-//               padding: EdgeInsets.all(8.0),
-//               child: Text(
-//                 'No items found',
-//                 style: TextStyle(color: Colors.grey),
-//               ),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (labelText != null)
+            Text(labelText!, style: CustomStyles.black12400),
+          if (labelText != null) const SizedBox(height: 5.0),
+          TypeAheadFormField<T>(
+            validator: validator,
+            textFieldConfiguration: TextFieldConfiguration(
+              controller: controller,
+              decoration: InputDecoration(
+                hintText: hintText,
+                isDense: true,
+                hintStyle: textStyle?.copyWith(color: Colors.grey) ??
+                    CustomStyles.black12400.copyWith(color: Colors.grey),
+                contentPadding:
+                    const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                filled: true,
+                fillColor: Colors.white,
+                border: OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColors.black54),
+                  borderRadius: BorderRadius.circular(5),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(5),
+                  borderSide: BorderSide(
+                      color: AppColors.black54.withOpacity(0.2)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(5),
+                  borderSide: BorderSide(
+                      color: AppColors.dblue.withOpacity(0.8)),
+                ),
+                counterText: '',
+              ),
+              style: textStyle ?? CustomStyles.black12400,
+              cursorColor: Colors.red,
+              cursorWidth: 1,
+            ),
+            suggestionsCallback: suggestionsCallback,
+            itemBuilder: (context, suggestion) => itemBuilder(context, suggestion),
+            onSuggestionSelected: (suggestion) =>
+                onSuggestionSelected(suggestion),
+            noItemsFoundBuilder: (context) => const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Text(
+                'No items found',
+                style: TextStyle(color: Colors.grey),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
 

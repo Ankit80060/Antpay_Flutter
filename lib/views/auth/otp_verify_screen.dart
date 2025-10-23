@@ -132,7 +132,7 @@ class OTPVerifyScreen extends StatelessWidget {
                                         otpcontroller.firebaseToken.value;
 
                                     await otpcontroller.resendOtp();
-                                    otpcontroller.startTimer(120);
+                                    otpcontroller.startTimer(180);
                                   }
                                 : null,
                             child: RichText(

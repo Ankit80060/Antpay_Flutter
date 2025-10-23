@@ -60,7 +60,7 @@ class PayUController extends GetxController implements PayUCheckoutProProtocol {
     //   Get.offAllNamed(RoutesName.dashboard);
     // }
 
-    CustomToast.show("Payment Success");
+    // CustomToast.show("Payment Success");
   }
 
   /// Payment Failure

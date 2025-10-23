@@ -20,24 +20,37 @@ android {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
 
-    defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.demo_app"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = 23
-        targetSdk = 36
-        versionCode = flutter.versionCode
-        versionName = flutter.versionName
+  defaultConfig {
+    applicationId = "com.example.demo_app"
+    minSdk = flutter.minSdkVersion
+    targetSdk = 36
+    versionCode = flutter.versionCode
+    versionName = flutter.versionName
+}
+
+
+   buildTypes {
+    getByName("release") {
+        // Enable code shrinking, obfuscation, and optimization
+        isMinifyEnabled = true
+        isShrinkResources = true
+
+        // Use your release signing config (for now debug if you don’t have keystore)
+        signingConfig = signingConfigs.getByName("debug")
+
+        // Add ProGuard rules
+        proguardFiles(
+            getDefaultProguardFile("proguard-android-optimize.txt"),
+            "proguard-rules.pro"
+        )
     }
 
-    buildTypes {
-        release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
-        }
+    getByName("debug") {
+        // Debug builds should not be minified
+        isMinifyEnabled = false
     }
+}
+
 }
 
 flutter {
@@ -50,6 +63,11 @@ dependencies {
     implementation("androidx.multidex:multidex:2.0.1")
     implementation("in.payu:payu-checkout-pro:2.1.1")
     implementation("in.payu:payu-ppi-sdk:1.0.0")
+ 
+    implementation("com.google.android.gms:play-services-auth:21.2.0")
+    implementation("com.google.android.gms:play-services-wallet:19.2.0")
+
+
 }
 
 configurations.all {
