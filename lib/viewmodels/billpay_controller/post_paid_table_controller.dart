@@ -1,5 +1,6 @@
 import 'package:antpay_lite/model/billpay/FetchBillBean.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../api/auth_token.dart';
@@ -89,6 +90,7 @@ class PostPaidTableController extends GetxController {
   }
 
   Future<void> callBillPaySucessApi() async {
+    showLoaderPopup(Get.context!);
     isLoading.value = true;
     try {
       Map orderdata = SessionManager().getGenerateOrderResponse();
@@ -103,8 +105,8 @@ class PostPaidTableController extends GetxController {
           servicetype: orderdata[SessionManager.SERVICE],
           transactionType: "Spend",
           paymentMethod: orderdata[SessionManager.PGTYPE],
-          number: SessionManager().getMobile(),
-          customermobile: billerInfoData.value!.bill_number,
+          number: billerInfoData.value!.bill_number,
+          customermobile:  SessionManager().getMobile(),
           transactionResult: SessionManager().getTranscationResult(),
           payuResponse: SessionManager().getPayUResponse());
 
@@ -175,4 +177,42 @@ class PostPaidTableController extends GetxController {
       isLoading.value = false;
     }
   }
+
+
+    void showLoaderPopup(BuildContext context) {
+  showDialog(
+    context: context,
+    barrierDismissible: false, 
+    builder: (BuildContext context) {
+      // Timer(const Duration(seconds: 10), () {
+      //   if (Navigator.of(context).canPop()) {
+      //     Navigator.of(context).pop();
+      //   }
+      // });
+
+      return Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        backgroundColor: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(
+                'assets/images/loader_image.gif',
+                width: 80,
+                height: 80,
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'Please wait...',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
 }

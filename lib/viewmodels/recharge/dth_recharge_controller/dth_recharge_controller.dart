@@ -141,6 +141,7 @@ class DthRechargeController extends GetxController with WidgetsBindingObserver {
   }
   
   Future<void> callBillPaySucessApi() async {
+    showLoaderPopup(Get.context!);
     isLoading.value = true;
     try {
       Map orderdata = SessionManager().getGenerateOrderResponse();
@@ -225,5 +226,42 @@ class DthRechargeController extends GetxController with WidgetsBindingObserver {
     }
   }
 
+
+ void showLoaderPopup(BuildContext context) {
+  showDialog(
+    context: context,
+    barrierDismissible: false, 
+    builder: (BuildContext context) {
+      // Timer(const Duration(seconds: 10), () {
+      //   if (Navigator.of(context).canPop()) {
+      //     Navigator.of(context).pop();
+      //   }
+      // });
+
+      return Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        backgroundColor: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(
+                'assets/images/loader_image.gif',
+                width: 80,
+                height: 80,
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'Please wait...',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
  
 }
