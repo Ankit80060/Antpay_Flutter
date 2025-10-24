@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:antpay_lite/api/auth_token.dart';
 import 'package:antpay_lite/custom_widget/custom_toast_msg.dart';
 import 'package:antpay_lite/model/recharge_model/circle_list_model.dart';
@@ -60,6 +62,7 @@ class AmountMobileRechargeController extends GetxController
       getCircleList();
       mobileCheckData = SessionManager().getMobileCheckResponse();
     });
+
   }
 
   @override
@@ -69,9 +72,7 @@ class AmountMobileRechargeController extends GetxController
         if (Get.arguments != null) {
           if (Get.arguments['fromPage'] == "FromMobileRecharge") {
             Future.delayed(const Duration(seconds: 2), () {
-              print("tttttttttttttttttttt ${getMobileNumber()}");
-
-              print("tttttttttttttttttttt ${SessionManager().getMobile()}");
+            
               callBillPaySucessApi();
             });
           }
@@ -243,6 +244,7 @@ class AmountMobileRechargeController extends GetxController
 
   Future<void> callBillPaySucessApi() async {
     loading.value = true;
+    showLoaderPopup(Get.context!);
     try {
       Map orderdata = SessionManager().getGenerateOrderResponse();
       RechargePayUPaymentReq data = RechargePayUPaymentReq(
@@ -256,10 +258,12 @@ class AmountMobileRechargeController extends GetxController
           servicetype: orderdata[SessionManager.SERVICE],
           transactionType: "Spend",
           paymentMethod: orderdata[SessionManager.PGTYPE],
-          number: SessionManager().getMobile(),
-          customermobile: getMobileNumber(),
+          number: getMobileNumber(),
+          customermobile:  SessionManager().getMobile(),
           transactionResult: SessionManager().getTranscationResult(),
           payuResponse: SessionManager().getPayUResponse().toString());
+
+          
 
       RechargePayUPaymentRes response =
           await repository.callPaymentSuccessRechargePay(
@@ -276,7 +280,7 @@ class AmountMobileRechargeController extends GetxController
       }
     } catch (e) {
       Get.toNamed(RoutesName.rechargeFail, arguments: null);
-      CustomToast.show(e.toString());
+      CustomToast.show("Something went wrong");
     } finally {
       loading.value = false;
     }
@@ -288,7 +292,9 @@ class AmountMobileRechargeController extends GetxController
       Map orderdata = SessionManager().getGenerateOrderResponse();
       RechargeStatusReq data = RechargeStatusReq(
         aParam: AppConstant.generateAuthParam(
-            SessionManager().getMobile().toString()),
+          // getMobileNumber()
+            SessionManager().getMobile().toString()
+            ),
         // mobile: SessionManager().getMobile(),
         utransactionid: orderdata[SessionManager.AMOUNT_TRANSCATION_ID],
       );
@@ -318,7 +324,6 @@ class AmountMobileRechargeController extends GetxController
       }
     } catch (e) {
        getTransactionStatusCount = 0;
-      CustomToast.show(e.toString());
        Get.toNamed(RoutesName.rechargeFail, arguments: null);
     } finally {
       loading.value = false;
@@ -336,4 +341,42 @@ class AmountMobileRechargeController extends GetxController
         mobileController.mobileCheckResponse.value?.company?.toUpperCase() ??
         '';
   }
+
+
+  void showLoaderPopup(BuildContext context) {
+  showDialog(
+    context: context,
+    barrierDismissible: false, 
+    builder: (BuildContext context) {
+      // Timer(const Duration(seconds: 10), () {
+      //   if (Navigator.of(context).canPop()) {
+      //     Navigator.of(context).pop();
+      //   }
+      // });
+
+      return Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        backgroundColor: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset(
+                'assets/images/loader_image.gif',
+                width: 80,
+                height: 80,
+              ),
+              const SizedBox(height: 16),
+              const Text(
+                'Please wait...',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
 }
