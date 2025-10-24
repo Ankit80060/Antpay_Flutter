@@ -206,7 +206,7 @@ class OccupationDetailsScreen extends StatelessWidget {
                         occuptiondetailsController.netMonthlySalaryController,
                     labelText: "Net Monthly Salary",
                     hintText: "Enter Net Monthly Salary",
-                    // keyboardType: TextInputType.number,
+                    textInputType: TextInputType.number,
                     validator: occuptiondetailsController.validateSalary,
                     onChanged: (val) =>
                         occuptiondetailsController.netMonthlySalary.value = val,
@@ -218,6 +218,7 @@ class OccupationDetailsScreen extends StatelessWidget {
                         occuptiondetailsController.ongoingLoanController,
                     labelText: "Ongoing Loan EMIs",
                     hintText: "Enter Ongoing Loan EMIs",
+                    textInputType: TextInputType.number,
                     validator: (value) {
                       // Required check
                       if (value == null || value.isEmpty) {
@@ -246,6 +247,7 @@ class OccupationDetailsScreen extends StatelessWidget {
                     controller: controller.loanAmountController,
                     labelText: "Loan Amount",
                     hintText: "Enter Loan Amount",
+                    textInputType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty)
                         return 'This field is required';
@@ -286,6 +288,7 @@ class OccupationDetailsScreen extends StatelessWidget {
                     controller: occuptiondetailsController.postalCodeController,
                     labelText: "Postal Code",
                     hintText: "Enter Postal Code",
+                    textInputType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty)
                         return 'This field is required';

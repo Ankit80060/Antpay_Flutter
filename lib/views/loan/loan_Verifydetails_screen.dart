@@ -1,6 +1,6 @@
 import 'package:antpay_lite/custom_widget/customstyles.dart';
+import 'package:antpay_lite/utils/routes/routes_name.dart';
 import 'package:antpay_lite/viewmodels/loan/loan_verifydetails_controller.dart';
-import 'package:antpay_lite/views/loan/loan_home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -129,8 +129,8 @@ class LoanVerifyDetailsScreen extends StatelessWidget {
                                       child: ElevatedButton(
                                         onPressed: () {
                                           Navigator.pop(context);
-                                          Get.offAll(() =>
-                                              LoanHomeScreen()); // Go to home
+                                          Get.toNamed(RoutesName
+                                              .dashboard); // Go to home
                                         },
                                         style: ElevatedButton.styleFrom(
                                           backgroundColor: CustomStyles.bgcolor,

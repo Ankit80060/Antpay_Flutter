@@ -1,4 +1,3 @@
-import 'package:antpay_lite/custom_widget/custom_appbar.dart';
 import 'package:antpay_lite/custom_widget/custom_loader.dart';
 import 'package:antpay_lite/custom_widget/customstyles.dart';
 import 'package:antpay_lite/prefrences/session_manager.dart';
@@ -44,7 +43,6 @@ class LoanHomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MainScaffold(
-      
       body: Obx(
         () => controller.isLoading.value
             ? const Center(child: Customloader())
@@ -97,6 +95,7 @@ class LoanHomeScreen extends StatelessWidget {
                       fontSize: 12,
                     ),
                   )),
+
               ElevatedButton(
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
@@ -116,26 +115,22 @@ class LoanHomeScreen extends StatelessWidget {
               const SizedBox(height: 15),
 
               Container(
-                padding: EdgeInsets.all(10),
+                padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                    color: CustomStyles.bgcolor,
-                    borderRadius: BorderRadius.circular(10)),
+                  color: CustomStyles.bgcolor,
+                  borderRadius: BorderRadius.circular(10),
+                ),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    _buildInfoBox(controller.experianScore.value.toString(),
-                        "Experian Credit Score"),
-                    _buildInfoBox(
-                        controller.activeLoanAccounts.value.toString(),
-                        "Active Loan Account"),
-                    _buildInfoBox(
-                      "${controller.creditUtilisation.value}%",
-                      "Credit Card Utilisation",
-                    ),
-                    _buildInfoBox(
-                      controller.delayedPayments.value.toString(),
-                      "Delayed Payment",
-                    ),
+                    _buildInfoBox("Experian Credit Score",
+                        controller.experianScore.value.toString()),
+                    _buildInfoBox("Active Loan Account",
+                        controller.activeLoanAccounts.value.toString()),
+                    _buildInfoBox("Credit Card Utilisation",
+                        "${controller.creditUtilisation.value}%"),
+                    _buildInfoBox("Delayed Payment",
+                        controller.delayedPayments.value.toString()),
                   ],
                 ),
               ),
@@ -147,26 +142,32 @@ class LoanHomeScreen extends StatelessWidget {
   }
 
   Widget _buildInfoBox(String title, String value) {
-    return Expanded(
+    const double _boxWidth = 70.0;
+
+    return SizedBox(
+      width: _boxWidth,
       child: Column(
         children: [
-          Text(
-            value,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 8,
-              color: Colors.black,
-            ),
-          ),
-          const SizedBox(height: 3),
           Text(
             title,
             textAlign: TextAlign.center,
             style: const TextStyle(
-              fontSize: 12,
               fontWeight: FontWeight.bold,
+              fontSize: 10,
               color: Colors.black,
             ),
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+          ),
+          const SizedBox(height: 3),
+          Text(
+            value,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 12,
+              color: Colors.black,
+            ),
+            textAlign: TextAlign.center,
           ),
         ],
       ),
