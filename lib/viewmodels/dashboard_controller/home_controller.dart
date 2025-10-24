@@ -29,10 +29,11 @@ import '../../repository/login_repository/homeScreenRepo/banner_repository.dart'
 import '../../utils/routes/routes_name.dart';
 
 class HomeContoller extends GetxController with WidgetsBindingObserver {
-    bool isloadAccount = false;
+  bool isloadAccount = false;
   CommonApiRepo repoClass = CommonApiRepo();
-  final AntpaySocialController antpaySocialController =
-      Get.put(AntpaySocialController());
+  final AntpaySocialController antpaySocialController = Get.put(
+    AntpaySocialController(),
+  );
 
   final String urlFacebook = "https://www.facebook.com/antworksmoney";
   final String urlTwitter = "https://twitter.com/AntworksMoney";
@@ -47,7 +48,7 @@ class HomeContoller extends GetxController with WidgetsBindingObserver {
 
   List<Subwallet>? walletDetails;
 
-// banner
+  // banner
   BannerApiRepo bannerApiRepo = BannerApiRepo();
   var bannerList = <Bannerlist>[].obs;
   var gamezonebannerList = <GameZoneData>[].obs;
@@ -74,7 +75,7 @@ class HomeContoller extends GetxController with WidgetsBindingObserver {
     getGameZoneBanner();
     // antpaySocialController.getAntpaySocialnewsdata();
     antpaySocialController.getAntpaySocialNews();
-  WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     getCustomerRecord();
     getPointBalance();
     getAnnouncementsData();
@@ -100,7 +101,7 @@ class HomeContoller extends GetxController with WidgetsBindingObserver {
 
   final List<dynamic> items = [
     'Please do not share OTP with anyone',
-    'Beware of frauds'
+    'Beware of frauds',
   ];
 
   final List<Map<String, String>> flatPageData = [
@@ -112,7 +113,7 @@ class HomeContoller extends GetxController with WidgetsBindingObserver {
     {"image": 'assets/images/loan_db.png', "title": "Loan"},
     {
       "image": 'assets/images/creditcard_pay_db.png',
-      "title": "Credit Card Pay"
+      "title": "Credit Card Pay",
     },
     {"image": 'assets/images/ic_credit_cards.png', "title": "Credit Card"},
     {"image": 'assets/images/motor-insurance.png', "title": "Insurance"},
@@ -123,7 +124,9 @@ class HomeContoller extends GetxController with WidgetsBindingObserver {
 
   late final List<List<Map<String, String>>> pageData;
   List<List<Map<String, String>>> paginateData(
-      List<Map<String, String>> original, int itemsPerPage) {
+    List<Map<String, String>> original,
+    int itemsPerPage,
+  ) {
     List<List<Map<String, String>>> paginated = [];
     for (var i = 0; i < original.length; i += itemsPerPage) {
       paginated.add(
@@ -157,7 +160,7 @@ class HomeContoller extends GetxController with WidgetsBindingObserver {
         // Get.toNamed(RoutesName.accountDetails);
         break;
       case 1:
-       CustomToast.show("Comming soon");
+        CustomToast.show("Comming soon");
         // Get.toNamed(RoutesName.creditLineView);
         break;
       case 2:
@@ -181,8 +184,7 @@ class HomeContoller extends GetxController with WidgetsBindingObserver {
         Get.toNamed(RoutesName.crediCradApplyHomeView);
         break;
       case 8:
-       CustomToast.show("Comming soon");
-        // Get.toNamed(RoutesName.insuranceHomeScreen);
+        Get.toNamed(RoutesName.insurancehomescreen);
         break;
       case 9:
         Get.toNamed(RoutesName.cardOfferScreen);
@@ -215,15 +217,18 @@ class HomeContoller extends GetxController with WidgetsBindingObserver {
       isLoading.value = true;
 
       AnnouncementRequestModel data = AnnouncementRequestModel(
-          mobile: SessionManager().getMobile(),
-          aParam: AppConstant.generateAuthParam(
-              SessionManager().getMobile().toString()),
-          source: 'Antpay');
+        mobile: SessionManager().getMobile(),
+        aParam: AppConstant.generateAuthParam(
+          SessionManager().getMobile().toString(),
+        ),
+        source: 'Antpay',
+      );
 
       final response = await bannerApiRepo.getAnnouncementsData(
-          SessionManager().getToken().toString(),
-          AuthToken.getAuthToken(),
-          data);
+        SessionManager().getToken().toString(),
+        AuthToken.getAuthToken(),
+        data,
+      );
       if (response.status.toString() == '1') {
         announcementList.assignAll(response.announcementList);
       } else {
@@ -271,9 +276,7 @@ class HomeContoller extends GetxController with WidgetsBindingObserver {
   }
 
   void clickOfferBanner(Offer data) {
-    Get.toNamed(RoutesName.bannerViewScreen, arguments: {
-      "id": data.id ?? "",
-    });
+    Get.toNamed(RoutesName.bannerViewScreen, arguments: {"id": data.id ?? ""});
   }
 
   getCustomerRecord() async {
@@ -284,7 +287,8 @@ class HomeContoller extends GetxController with WidgetsBindingObserver {
         messageCode: "",
         clientTxnId: "",
         aParam: AppConstant.generateAuthParam(
-            SessionManager().getMobile().toString()),
+          SessionManager().getMobile().toString(),
+        ),
         customerMobile: SessionManager().getMobile().toString(),
       );
 
@@ -320,8 +324,13 @@ class HomeContoller extends GetxController with WidgetsBindingObserver {
 
         walletDetails = response.cardList?.first.subwalletListDetails;
         String? walletStatus = response.cardList!.first.statusDescription;
-        final loadaccountNumber = response
-                .cardList?.first.subwalletListDetails?.first.accountNumber ??
+        final loadaccountNumber =
+            response
+                .cardList
+                ?.first
+                .subwalletListDetails
+                ?.first
+                .accountNumber ??
             "";
         SessionManager().addReterieveaccountNumber(loadaccountNumber);
         SessionManager().addPayUCustomerDetails(
@@ -336,10 +345,10 @@ class HomeContoller extends GetxController with WidgetsBindingObserver {
           walletAccountNumber: walletDetails!.first.accountNumber!,
           walletId: walletDetails!.first.subwalletId!,
           accountBalance: CommonUtils.convertAmountToRupees(
-              cardDetails.value?.availableBalance!.toString()),
+            cardDetails.value?.availableBalance!.toString(),
+          ),
           walletStatus: walletStatus.toString(),
         );
-      
       } else {
         userRetriveData(null);
         isCardShow.value = false;
@@ -370,13 +379,15 @@ class HomeContoller extends GetxController with WidgetsBindingObserver {
         customerId: customerId,
         implType: "PG_TU_I",
         implId: "I|70190",
-        transactionAmount: ((double.tryParse(
-                        orderdata[SessionManager.INVESTMENT_AMOUNT]
-                                ?.toString() ??
-                            '0') ??
-                    0) *
-                100)
-            .toInt(),
+        transactionAmount:
+            ((double.tryParse(
+                          orderdata[SessionManager.INVESTMENT_AMOUNT]
+                                  ?.toString() ??
+                              '0',
+                        ) ??
+                        0) *
+                    100)
+                .toInt(),
         sourceType: 0,
         sender: "PayU PG",
         sourceAccount: "27389282",
@@ -392,7 +403,8 @@ class HomeContoller extends GetxController with WidgetsBindingObserver {
         transactionType: "Load",
         pgNo: SessionManager().getAntTxnId(),
         aParam: AppConstant.generateAuthParam(
-            SessionManager().getMobile().toString()),
+          SessionManager().getMobile().toString(),
+        ),
         tagName: "ppi-wallet_payment",
       );
 
@@ -402,27 +414,27 @@ class HomeContoller extends GetxController with WidgetsBindingObserver {
         data,
       );
 
-      final decodedResponse =
-          response is String ? jsonDecode(response) : response;
+      final decodedResponse = response is String
+          ? jsonDecode(response)
+          : response;
 
       if (decodedResponse['status'] == 1 ||
           decodedResponse['responseCode'] == '00') {
-  await getCustomerRecord();
-      Get.to(
-    () =>  FailureSuccessScreen(),
-    arguments: {
-      'success': true,
-      'message': decodedResponse['msg'] ?? 'Load Money Successful',
-      'amount': (data.transactionAmount ?? 0) / 100,
-      'transferTo': data.sourceAccount ?? '',
-      "transactionType":data.transactionType??"",
-      'transactionId': decodedResponse['accosaTransactionId'] ?? '',
-      'transactionDate': decodedResponse['responseDateTime'] ?? '',
-    },
-  );
+        await getCustomerRecord();
+        Get.to(
+          () => FailureSuccessScreen(),
+          arguments: {
+            'success': true,
+            'message': decodedResponse['msg'] ?? 'Load Money Successful',
+            'amount': (data.transactionAmount ?? 0) / 100,
+            'transferTo': data.sourceAccount ?? '',
+            "transactionType": data.transactionType ?? "",
+            'transactionId': decodedResponse['accosaTransactionId'] ?? '',
+            'transactionDate': decodedResponse['responseDateTime'] ?? '',
+          },
+        );
       } else {
-      
-  CustomToast.show(decodedResponse['msg']);
+        CustomToast.show(decodedResponse['msg']);
       }
     } catch (e) {
       print("Error in callAddMoneyApi: $e");
@@ -499,14 +511,17 @@ class HomeContoller extends GetxController with WidgetsBindingObserver {
   Future<void> getPointBalance() async {
     try {
       PointBalanceRequestModel data = PointBalanceRequestModel(
-          mobile: SessionManager().getMobile(),
-          aParam: AppConstant.generateAuthParam(
-              SessionManager().getMobile().toString()));
+        mobile: SessionManager().getMobile(),
+        aParam: AppConstant.generateAuthParam(
+          SessionManager().getMobile().toString(),
+        ),
+      );
 
       PointBalanceResponseModel response = await repository.getPointBalance(
-          SessionManager().getToken().toString(),
-          AuthToken.getAuthToken(),
-          data);
+        SessionManager().getToken().toString(),
+        AuthToken.getAuthToken(),
+        data,
+      );
 
       if (response.status.toString() == '1') {
         SessionManager().addAntCoinsMoney(response.point ?? "0");
@@ -538,7 +553,8 @@ class HomeContoller extends GetxController with WidgetsBindingObserver {
         urn: SessionManager().getPayUCustomerUrn(),
         customerId: SessionManager().getPayUCustomerId(),
         aParam: AppConstant.generateAuthParam(
-            SessionManager().getMobile().toString()),
+          SessionManager().getMobile().toString(),
+        ),
         // mobile: SessionManager().getMobile().toString(),
       );
 
@@ -580,8 +596,10 @@ class HomeContoller extends GetxController with WidgetsBindingObserver {
 
       case 4:
         SessionManager().addServicetype("Loan Repayment");
-        Get.toNamed(RoutesName.bharatBillPayTemplateView,
-            arguments: {'tabIndex': "0"});
+        Get.toNamed(
+          RoutesName.bharatBillPayTemplateView,
+          arguments: {'tabIndex': "0"},
+        );
         break;
 
       case 5:
@@ -598,16 +616,17 @@ class HomeContoller extends GetxController with WidgetsBindingObserver {
         CustomToast.show("Comming soon");
     }
   }
+
   @override
   void onClose() {
     // TODO: implement onClose
     super.onClose();
-        WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
   }
-    @override
+
+  @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     if (state == AppLifecycleState.resumed) {
-  
       if (!isloadAccount &&
           SessionManager().getTranscationResult() == AppConstant.RESULT_OK) {
         isloadAccount = true;

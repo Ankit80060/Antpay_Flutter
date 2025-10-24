@@ -7,6 +7,8 @@ import 'package:antpay_lite/views/auth/user_alert_screen.dart';
 import 'package:antpay_lite/views/billpay/allbillpay_screen.dart';
 import 'package:antpay_lite/views/billpay/bharatBillPayTemplateView.dart';
 import 'package:antpay_lite/views/dashboard/custom_dashboard_screen.dart';
+import 'package:antpay_lite/views/failure_success_screen.dart';
+import 'package:antpay_lite/views/insurance/insurance_home_screen.dart';
 import 'package:antpay_lite/views/loan/Business_loan/BusinessLoanForm.dart';
 import 'package:antpay_lite/views/loan/Business_loan/Other_details_screen.dart';
 import 'package:antpay_lite/views/loan/Business_loan/business_loan_amount.dart';
@@ -17,7 +19,6 @@ import 'package:antpay_lite/views/loan/carloan/CarLoan_Screen.dart';
 import 'package:antpay_lite/views/loan/carloan/carloanform.dart';
 import 'package:antpay_lite/views/loan/loan_Verifydetails_screen.dart';
 import 'package:antpay_lite/views/loan/loan_home_screen.dart';
-import 'package:antpay_lite/views/failure_success_screen.dart';
 import 'package:antpay_lite/views/loan/loan_offer_screen.dart';
 import 'package:antpay_lite/views/miniAcc/mini_account_form.dart';
 import 'package:antpay_lite/views/miniAcc/mini_account_form_failed.dart';
@@ -97,33 +98,33 @@ class AppPages {
 
     GetPage(
       name: RoutesName.dashboard,
-      page: () =>  MainScaffold(
+      page: () => MainScaffold(
         selectedIndex: 0,
-          isShowAppBar: false,
+        isShowAppBar: false,
         body: HomeScreen(),
       ),
     ),
     GetPage(
       name: RoutesName.history,
-      page: () =>  MainScaffold(
+      page: () => MainScaffold(
         selectedIndex: 2,
-          isShowAppBar: false,
+        isShowAppBar: false,
         body: TransactionHistory(),
       ),
     ),
     GetPage(
       name: RoutesName.social,
-      page: () =>  MainScaffold(
+      page: () => MainScaffold(
         selectedIndex: 3,
-         isShowAppBar: false,
+        isShowAppBar: false,
         body: SocialView(),
       ),
     ),
     GetPage(
       name: RoutesName.profile,
-      page: () =>  MainScaffold(
+      page: () => MainScaffold(
         selectedIndex: 1,
-         isShowAppBar: false,
+        isShowAppBar: false,
         body: ProfileView(),
       ),
     ),
@@ -134,10 +135,9 @@ class AppPages {
         name: RoutesName.miniAccountFormSuccess,
         page: () => MiniAccountFormSuccess()),
 
-            GetPage(
+    GetPage(
         name: RoutesName.failureSuccessScreen,
         page: () => FailureSuccessScreen(),
-      
         transition: Transition.cupertino),
     GetPage(
       name: RoutesName.addMoney,
@@ -148,8 +148,7 @@ class AppPages {
           isRechargeScreen: args["isaddmoney"] ?? false,
         );
       },
-       transition: Transition.cupertino,
-
+      transition: Transition.cupertino,
     ),
     GetPage(
         name: RoutesName.accountDetails,
@@ -191,7 +190,9 @@ class AppPages {
 
     GetPage(
         name: RoutesName.miniAccOtpPage,
-        page: () => MiniAccOtpPage(service: "",),
+        page: () => MiniAccOtpPage(
+              service: "",
+            ),
         transition: Transition.cupertino),
 
     GetPage(
@@ -237,10 +238,15 @@ class AppPages {
         name: RoutesName.postPaidFragmentScreen,
         page: () => PostPaidFragment(),
         transition: Transition.cupertino),
-   GetPage(name: RoutesName.accounttransferScreen, page: () => AccountTransferScreen()),
-    GetPage(name: RoutesName.addbeneficiaryscreen, page: () => AddBeneficiaryScreen()),
-    GetPage(name: RoutesName.fetchbeneficiaryscreen, page: () => AccountTransferBeneficailScreen()),
-        
+    GetPage(
+        name: RoutesName.accounttransferScreen,
+        page: () => AccountTransferScreen()),
+    GetPage(
+        name: RoutesName.addbeneficiaryscreen,
+        page: () => AddBeneficiaryScreen()),
+    GetPage(
+        name: RoutesName.fetchbeneficiaryscreen,
+        page: () => AccountTransferBeneficailScreen()),
 
     GetPage(
         name: RoutesName.billerTableDetailsPage,
@@ -376,18 +382,11 @@ class AppPages {
         page: () => InvestmentDashboardScreen(),
         transition: Transition.cupertino),
 
-        
-
-         GetPage(
+    GetPage(
         name: RoutesName.investmentHomeView,
         page: () => InvestmentHomeView(),
         transition: Transition.cupertino),
 
-        
-        
-
-        
-        
     GetPage(
       name: RoutesName.businessloanamount,
       page: () => BusinessLoanAmount(),
@@ -404,6 +403,10 @@ class AppPages {
     GetPage(
         name: RoutesName.loanverifydetailsscreen,
         page: () => LoanVerifyDetailsScreen(),
+        transition: Transition.cupertino),
+    GetPage(
+        name: RoutesName.insurancehomescreen,
+        page: () => InsuranceHomeScreen(),
         transition: Transition.cupertino),
   ];
 }

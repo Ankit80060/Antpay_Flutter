@@ -6,7 +6,7 @@ class RoutesName {
   static const String otpVerify = '/verifyOtp';
   static const String dashboard = '/dashboard';
   static const String history = '/history';
-  static const String social = '/social'; 
+  static const String social = '/social';
   static const String profile = '/profile';
 //wallet addmoney
   static const String addMoney = '/addMoney';
@@ -91,4 +91,5 @@ class RoutesName {
   static String businessloanform = '/businessloanform';
   static String loanofferscreen = '/loanofferscreen';
   static String loanverifydetailsscreen = '/loanverifydetailsscreen';
+  static String insurancehomescreen = '/insurancehomescreen';
 }
