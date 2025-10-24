@@ -247,6 +247,7 @@ class ProfileView extends StatelessWidget {
                   title: "Insurance",
                   icons: "assets/sidebar/insurance-s.png",
                   onTap: () {
+                     CustomToast.show("Comming soon");
                     // Get.toNamed(RoutesName.investmentHomeView);
                   },
                 ),
@@ -261,7 +262,8 @@ class ProfileView extends StatelessWidget {
                   title: "Credit Line",
                   icons: "assets/sidebar/creditline-s.png",
                   onTap: () {
-                      Get.toNamed(RoutesName.creditLineView);
+                      CustomToast.show("Comming soon");
+                      // Get.toNamed(RoutesName.creditLineView);
                   },
                 ),
                 CustomListtileProfile(

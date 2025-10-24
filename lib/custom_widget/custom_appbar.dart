@@ -3,47 +3,29 @@ import 'package:antpay_lite/viewmodels/notificationcontroller/notification_contr
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import 'customstyles.dart';
 
-class CustomAppbar extends StatefulWidget implements PreferredSizeWidget {
+class CustomAppbar extends StatelessWidget implements PreferredSizeWidget {
   final bool? showBackIcon;
+  final NotificationController controller = Get.put(NotificationController());
+  final RxBool isBellClicked = false.obs;
 
-  const CustomAppbar({super.key, this.showBackIcon});
+  CustomAppbar({super.key, this.showBackIcon});
 
   @override
   Size get preferredSize => const Size.fromHeight(55);
 
   @override
-  State<CustomAppbar> createState() => _CustomAppbarState();
-}
-
-class _CustomAppbarState extends State<CustomAppbar> {
-  final NotificationController controller = Get.put(NotificationController());
-  bool isBellClicked = false;
-
-  @override
-  void initState() {
-    super.initState();
-
-    // Fetch notifications once when app bar is initialized
-    controller.fetchNotifications().then((_) {
-      if (controller.notifications.isNotEmpty) {
-        setState(() {
-          isBellClicked = false;
-        });
-      }
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+    // Fetch notifications once when building
+    controller.fetchNotifications();
+
     return Obx(() {
       final notificationCount = controller.notifications.length;
 
       String bellIcon;
       if (notificationCount > 0) {
-        bellIcon = isBellClicked
+        bellIcon = isBellClicked.value
             ? 'assets/images/notification_bell.png'
             : 'assets/images/notificationbell31.png';
       } else {
@@ -55,7 +37,7 @@ class _CustomAppbarState extends State<CustomAppbar> {
         surfaceTintColor: Colors.transparent,
         foregroundColor: Colors.black87,
         automaticallyImplyLeading: false,
-        leading: widget.showBackIcon == true
+        leading: showBackIcon == true
             ? IconButton(
                 icon: const Icon(CupertinoIcons.back),
                 color: Colors.black87,
@@ -69,9 +51,7 @@ class _CustomAppbarState extends State<CustomAppbar> {
         actions: [
           GestureDetector(
             onTap: () {
-              setState(() {
-                isBellClicked = true;
-              });
+              isBellClicked.value = true;
               Get.toNamed(RoutesName.notificationscreen);
             },
             child: Padding(
@@ -80,7 +60,7 @@ class _CustomAppbarState extends State<CustomAppbar> {
                 clipBehavior: Clip.none,
                 children: [
                   Image.asset(bellIcon, scale: 4),
-                  if (notificationCount > 0 && !isBellClicked)
+                  if (notificationCount > 0 && !isBellClicked.value)
                     Positioned(
                       right: 2,
                       top: 2,

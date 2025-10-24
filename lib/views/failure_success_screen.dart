@@ -26,7 +26,7 @@ class FailureSuccessScreen extends StatelessWidget {
         : "assets/images/investment_fail.png";
 
     return Scaffold(
-      appBar: const CustomAppbar(showBackIcon: true),
+      appBar:  CustomAppbar(showBackIcon: true),
       backgroundColor: Colors.grey.shade100,
       body: SingleChildScrollView(
         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),

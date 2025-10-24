@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:antpay_lite/api/auth_token.dart';
 import 'package:antpay_lite/custom_widget/custom_toast_msg.dart';
+import 'package:antpay_lite/custom_widget/customstyles.dart';
 import 'package:antpay_lite/model/recharge_model/circle_list_model.dart';
 import 'package:antpay_lite/model/recharge_model/operator_list_model.dart';
 import 'package:antpay_lite/prefrences/session_manager.dart';
@@ -62,20 +63,18 @@ class AmountMobileRechargeController extends GetxController
       getCircleList();
       mobileCheckData = SessionManager().getMobileCheckResponse();
     });
-
   }
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     if (state == AppLifecycleState.resumed) {
       // if (SessionManager().getTranscationResult() == AppConstant.RESULT_OK) {
-        if (Get.arguments != null) {
-          if (Get.arguments['fromPage'] == "FromMobileRecharge") {
-            Future.delayed(const Duration(seconds: 2), () {
-            
-              callBillPaySucessApi();
-            });
-          }
+      if (Get.arguments != null) {
+        if (Get.arguments['fromPage'] == "FromMobileRecharge") {
+          Future.delayed(const Duration(seconds: 2), () {
+            callBillPaySucessApi();
+          });
+        }
         // }
       }
     }
@@ -259,12 +258,11 @@ class AmountMobileRechargeController extends GetxController
           transactionType: "Spend",
           paymentMethod: orderdata[SessionManager.PGTYPE],
           number: getMobileNumber(),
-          customermobile:  SessionManager().getMobile(),
+          customermobile: SessionManager().getMobile(),
           transactionResult: SessionManager().getTranscationResult(),
           payuResponse: SessionManager().getPayUResponse().toString());
 
-          
-
+      return;
       RechargePayUPaymentRes response =
           await repository.callPaymentSuccessRechargePay(
               AuthToken.getAuthToken(),
@@ -273,7 +271,7 @@ class AmountMobileRechargeController extends GetxController
 
       if (response.status.toString() == '1') {
         Get.toNamed(RoutesName.rechargeSuccess, arguments: null);
-      } else  {
+      } else {
         // CustomToast.show(response.responseMessage ?? "");
 
         callCheckRechargeStatusApi();
@@ -292,9 +290,8 @@ class AmountMobileRechargeController extends GetxController
       Map orderdata = SessionManager().getGenerateOrderResponse();
       RechargeStatusReq data = RechargeStatusReq(
         aParam: AppConstant.generateAuthParam(
-          // getMobileNumber()
-            SessionManager().getMobile().toString()
-            ),
+            // getMobileNumber()
+            SessionManager().getMobile().toString()),
         // mobile: SessionManager().getMobile(),
         utransactionid: orderdata[SessionManager.AMOUNT_TRANSCATION_ID],
       );
@@ -314,17 +311,17 @@ class AmountMobileRechargeController extends GetxController
           });
         } else {
           getTransactionStatusCount = 0;
-        CustomToast.show(response.responseMessage ?? "");
+          CustomToast.show(response.responseMessage ?? "");
           Get.toNamed(RoutesName.pendingOrderScreen, arguments: null);
         }
       } else {
-         getTransactionStatusCount = 0;
+        getTransactionStatusCount = 0;
         CustomToast.show(response.responseMessage ?? "");
         Get.toNamed(RoutesName.rechargeFail, arguments: null);
       }
     } catch (e) {
-       getTransactionStatusCount = 0;
-       Get.toNamed(RoutesName.rechargeFail, arguments: null);
+      getTransactionStatusCount = 0;
+      Get.toNamed(RoutesName.rechargeFail, arguments: null);
     } finally {
       loading.value = false;
     }
@@ -342,41 +339,38 @@ class AmountMobileRechargeController extends GetxController
         '';
   }
 
-
   void showLoaderPopup(BuildContext context) {
-  showDialog(
-    context: context,
-    barrierDismissible: false, 
-    builder: (BuildContext context) {
-      // Timer(const Duration(seconds: 10), () {
-      //   if (Navigator.of(context).canPop()) {
-      //     Navigator.of(context).pop();
-      //   }
-      // });
-
-      return Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        backgroundColor: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset(
-                'assets/images/loader_image.gif',
-                width: 80,
-                height: 80,
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                'Please wait...',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-              ),
-            ],
-          ),
-        ),
-      );
-    },
-  );
-}
+    Get.dialog(
+        barrierDismissible: false,
+        Align(
+          alignment: Alignment.center,
+          child: Material(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(0),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.94,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 16.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    // mainAxisAlignment: MainAxisAlignment.center,
+                    // crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/images/loader_image.gif',
+                        width: 80,
+                        height: 80,
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'Please wait...',
+                        style: CustomStyles.black12400,
+                      ),
+                    ],
+                  ),
+                ),
+              )),
+        ));
+  }
 }

@@ -145,19 +145,20 @@ class HomeContoller extends GetxController with WidgetsBindingObserver {
   void handelClickCard(int index) {
     switch (index) {
       case 0:
-        // if (kycResponseCode != null && kycResponseCode.toString() == "00") {
-        //   if (kycAccountStatus != null && kycAccountStatus.toString() != "0") {
-        //     CustomToast.show("Your Wallet Blocked");
-        //     return;
-        //   }
-        //   Get.toNamed(RoutesName.accountDetails);
-        // } else {
-        //   Get.toNamed(RoutesName.miniAccPhonePage);
-        // }
-        Get.toNamed(RoutesName.accountDetails);
+        if (kycResponseCode != null && kycResponseCode.toString() == "00") {
+          if (kycAccountStatus != null && kycAccountStatus.toString() != "0") {
+            CustomToast.show("Your Wallet Blocked");
+            return;
+          }
+          Get.toNamed(RoutesName.accountDetails);
+        } else {
+          Get.toNamed(RoutesName.miniAccPhonePage);
+        }
+        // Get.toNamed(RoutesName.accountDetails);
         break;
       case 1:
-        Get.toNamed(RoutesName.creditLineView);
+       CustomToast.show("Comming soon");
+        // Get.toNamed(RoutesName.creditLineView);
         break;
       case 2:
         Get.toNamed(RoutesName.p2pLending);
@@ -180,6 +181,7 @@ class HomeContoller extends GetxController with WidgetsBindingObserver {
         Get.toNamed(RoutesName.crediCradApplyHomeView);
         break;
       case 8:
+       CustomToast.show("Comming soon");
         // Get.toNamed(RoutesName.insuranceHomeScreen);
         break;
       case 9:

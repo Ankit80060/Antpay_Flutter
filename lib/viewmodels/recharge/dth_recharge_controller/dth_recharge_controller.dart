@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../api/auth_token.dart';
+import '../../../custom_widget/customstyles.dart';
 import '../../../model/recharge_model/recharge_payu_model.dart';
 import '../../../model/recharge_model/recharge_status_check.dart';
 import '../../../repository/billpay_repository/billpay_repo.dart';
@@ -228,40 +229,38 @@ class DthRechargeController extends GetxController with WidgetsBindingObserver {
 
 
  void showLoaderPopup(BuildContext context) {
-  showDialog(
-    context: context,
-    barrierDismissible: false, 
-    builder: (BuildContext context) {
-      // Timer(const Duration(seconds: 10), () {
-      //   if (Navigator.of(context).canPop()) {
-      //     Navigator.of(context).pop();
-      //   }
-      // });
-
-      return Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        backgroundColor: Colors.white,
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset(
-                'assets/images/loader_image.gif',
-                width: 80,
-                height: 80,
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                'Please wait...',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-              ),
-            ],
-          ),
-        ),
-      );
-    },
-  );
+ Get.dialog(
+        barrierDismissible: false,
+        Align(
+          alignment: Alignment.center,
+          child: Material(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(0),
+              child: SizedBox(
+                width: MediaQuery.of(context).size.width * 0.94,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0, vertical: 16.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    // mainAxisAlignment: MainAxisAlignment.center,
+                    // crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/images/loader_image.gif',
+                        width: 80,
+                        height: 80,
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'Please wait...',
+                        style: CustomStyles.black12400,
+                      ),
+                    ],
+                  ),
+                ),
+              )),
+        ));
 }
  
 }
