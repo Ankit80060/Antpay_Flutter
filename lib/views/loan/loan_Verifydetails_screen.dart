@@ -1,6 +1,6 @@
-import 'package:antpay_lite/custom_widget/custom_appbar.dart';
 import 'package:antpay_lite/custom_widget/customstyles.dart';
 import 'package:antpay_lite/viewmodels/loan/loan_verifydetails_controller.dart';
+import 'package:antpay_lite/views/loan/loan_home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,7 +14,6 @@ class LoanVerifyDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MainScaffold(
-      
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
@@ -83,7 +82,80 @@ class LoanVerifyDetailsScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          showDialog(
+                            context: context,
+                            builder: (context) => Dialog(
+                              shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12)),
+                              backgroundColor: Colors.white,
+                              surfaceTintColor: Colors.white,
+                              child: Padding(
+                                padding: const EdgeInsets.all(18),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        const Text(
+                                          "Failed to Request",
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.normal,
+                                            color: Colors.black87,
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () => Navigator.pop(context),
+                                          child: const Icon(Icons.close,
+                                              size: 18, color: Colors.black54),
+                                        ),
+                                      ],
+                                    ),
+                                    const Divider(
+                                        thickness: 1, color: Colors.grey),
+                                    const SizedBox(height: 8),
+                                    const Text(
+                                      "Please try after sometime.",
+                                      style: TextStyle(
+                                          fontSize: 13, color: Colors.black87),
+                                    ),
+                                    const SizedBox(height: 16),
+                                    Align(
+                                      alignment: Alignment.centerRight,
+                                      child: ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                          Get.offAll(() =>
+                                              LoanHomeScreen()); // Go to home
+                                        },
+                                        style: ElevatedButton.styleFrom(
+                                          backgroundColor: CustomStyles.bgcolor,
+                                          foregroundColor: Colors.black87,
+                                          elevation: 0,
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 8),
+                                          shape: RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(6)),
+                                        ),
+                                        child: const Text(
+                                          "RETURN TO HOME",
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w500),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.blue[900],
                           foregroundColor: Colors.white,
