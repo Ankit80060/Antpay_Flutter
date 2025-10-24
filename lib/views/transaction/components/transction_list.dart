@@ -29,7 +29,7 @@ class TransactionList extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              tx.transactionNarration??"",
+              tx.transactionNarration ?? "",
               style: CustomStyles.black13500,
             ),
             SizedBox(
@@ -44,7 +44,7 @@ class TransactionList extends StatelessWidget {
               "Ref: ${tx.clientTxnId}",
               style: CustomStyles.grey123.copyWith(fontSize: 11.0),
             ),
-            Text(tx.transactionDate ??'',
+            Text(tx.transactionDate ?? '',
                 style: CustomStyles.grey123.copyWith(fontSize: 11.0)),
           ],
         ),
@@ -52,21 +52,20 @@ class TransactionList extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("Success", style: CustomStyles.black12600),
+            Text("SUCCESS", style: CustomStyles.black12600),
             const SizedBox(height: 4),
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Icon(
-                  true ? Icons.check_circle : Icons.cancel,
+                  true ? Icons.add_circle : Icons.remove_circle,
                   color: true ? Colors.green : Colors.red,
                   size: 16,
                 ),
                 const SizedBox(width: 4),
-                Text("+${tx.transactionAmount}",
-                    style: CustomStyles.black12400.copyWith(
-                      color: true ? Colors.green : Colors.red,
-                    )),
+                Text(
+                    "₹${((num.tryParse(tx.transactionAmount.toString()) ?? 0) / 100)}",
+                 style: CustomStyles.black13500),
               ],
             ),
           ],

@@ -174,11 +174,7 @@ class TransactionHistory extends StatelessWidget {
                                     const SizedBox(width: 4),
                                     Text(
                                       "₹${txn.amount}" ?? "0",
-                                      style: CustomStyles.black12400.copyWith(
-                                        color: txn.status == "success"
-                                            ? Colors.green
-                                            : Colors.red,
-                                      ),
+                                      style: CustomStyles.black13500
                                     ),
                                   ],
                                 ),

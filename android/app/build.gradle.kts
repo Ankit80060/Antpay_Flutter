@@ -11,8 +11,17 @@ plugins {
 // --- Load keystore properties ---
 val keystorePropertiesFile = rootProject.file("key.properties")
 val keystoreProperties = Properties()
+<<<<<<< Updated upstream
 if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+=======
+
+if (keystorePropertiesFile.exists()) {
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
+    println("✅ Loaded key.properties successfully")
+} else {
+    println("⚠️ key.properties file not found — using debug signing config")
+>>>>>>> Stashed changes
 }
 
 android {

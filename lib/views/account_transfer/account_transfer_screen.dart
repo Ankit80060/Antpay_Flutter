@@ -14,17 +14,13 @@ import '../../MainScaffold.dart';
 
 class AccountTransferScreen extends StatelessWidget {
   BeneficiaryData? beneficiaryData;
-  AccountTransferScreen({super.key,this.beneficiaryData});
+  AccountTransferScreen({super.key, this.beneficiaryData});
 
   final controller = Get.put(AccountTransferController());
   final formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-
-
-
     return MainScaffold(
-      
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(10),
         child: Card(
@@ -40,7 +36,8 @@ class AccountTransferScreen extends StatelessWidget {
                     blurRadius: 5,
                   ),
                 ]),
-            child: Form(key: formKey,
+            child: Form(
+              key: formKey,
               child: Padding(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
@@ -52,49 +49,51 @@ class AccountTransferScreen extends StatelessWidget {
                     CustomTextField(
                       labelText: "Amount",
                       controller: controller.amountController,
-                   textInputType: TextInputType.numberWithOptions(decimal: false),
+                      textInputType:
+                          TextInputType.numberWithOptions(decimal: false),
                       inputformater: [
                         FilteringTextInputFormatter.digitsOnly,
                       ],
                       hintText: "Enter Amount",
                       length: 6,
-                        validator: (val) {
-                                if (val == null || val.isEmpty) {
-                                  return "Amount is required";
-                                }
-                                return null;
-                              },
+                      validator: (val) {
+                        if (val == null || val.isEmpty) {
+                          return "Amount is required";
+                        }
+                        return null;
+                      },
                     ),
                     CustomTextField(
                       controller: controller.remarkController,
                       hintText: "Enter Message",
                       labelText: 'Message',
                       validator: (val) {
-                                if (val == null || val.isEmpty) {
-                                  return "Message is required";
-                                }
-                                return null;
-                              },
+                        if (val == null || val.isEmpty) {
+                          return "Message is required";
+                        }
+                        return null;
+                      },
                     ),
                     const SizedBox(height: 20),
                     CustomElevatedButton(
                         onPressed: () {
-                          if(formKey.currentState!.validate()){
-                          SessionManager().addValue(controller.amountController.text);
-                          SessionManager().addMessage(controller.remarkController.text);
-                            Get.offAll(()=>ConfirmMPINScreen(),arguments: beneficiaryData);
+                          if (formKey.currentState!.validate()) {
+                            SessionManager()
+                                .addValue(controller.amountController.text);
+                            SessionManager()
+                                .addMessage(controller.remarkController.text);
+                            Get.offAll(() => ConfirmMPINScreen(),
+                                arguments: beneficiaryData);
                           }
-                         
                         },
                         text: "Send Money"),
                     const SizedBox(height: 4),
-                 Align(
-                      alignment: Alignment.centerRight,
-                      child:  Text(
-                            "Wallet Balance: ₹${SessionManager().getPayUCustomerWalletBalance() ?? '0.00'}",
-                            style: CustomStyles.grey125,
-                          )),
-                  
+                    Align(
+                        alignment: Alignment.centerRight,
+                        child: Text(
+                          "Wallet Balance: ₹${SessionManager().getPayUCustomerWalletBalance() ?? '0.00'}",
+                          style: CustomStyles.grey125,
+                        )),
                     const SizedBox(height: 16),
                   ],
                 ),
